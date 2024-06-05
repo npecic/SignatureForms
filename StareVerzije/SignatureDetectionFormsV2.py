@@ -3,20 +3,24 @@ from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader, PdfWriter
 from pytesseract import image_to_string
 from pdf2image import convert_from_path
-from datetime import datetime  # Import datetime module
+from datetime import datetime
 import os
 import re
 import logging
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Configuration
-UPLOAD_FOLDER = 'uploads'
-OUTPUT_FOLDER = 'outputs'
+UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', '../uploads')
+OUTPUT_FOLDER = os.getenv('OUTPUT_FOLDER', '../outputs')
 ALLOWED_EXTENSIONS = {'pdf'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
-app.secret_key = 'supersecretkey'  # Required for flashing messages
+app.secret_key = os.getenv('SECRET_KEY', 'supersecretkey')  # Required for flashing messages
 
 # Ensure the upload and output directories exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -52,9 +56,9 @@ def detect_signature_pages(pdf_reader, pdf_path):
         'John J. Willis', 'License Number: W327297', 'Signature', 'Director, Member Services'
     ]
     secondary_keywords = ['Signature Of Applicant/First Named Insured', "Applicant's/Named Insured's Signature", "Signature Of Applicant/Named Insured",
-                          'Signature of Insured', 'Signature of Third Party Designee']
+                          'Signature of Insured', 'Signature of Third Party Designee', 'Applicant Signature', 'Signature of Named Insured']
 
-    primary_keyword_patterns = [re.compile(r'\b' + re.escape(keyword) + r'\b') for keyword in primary_keywords]
+    primary_keyword_patterns = [re.compile(r'\b' + re.escape(keyword) + r'\b', re.IGNORECASE) for keyword in primary_keywords]
 
     for page_num in range(len(pdf_reader.pages)):
         try:
@@ -62,34 +66,18 @@ def detect_signature_pages(pdf_reader, pdf_path):
             text = page.extract_text()
             if text:
                 text = text.strip()
-                primary_keyword_matched = False
-                for pattern in primary_keyword_patterns:
-                    if pattern.search(text):
-                        primary_keyword_matched = True
-                        break
+                primary_keyword_matched = any(pattern.search(text) for pattern in primary_keyword_patterns)
                 if primary_keyword_matched:
-                    secondary_keyword_matched = False
-                    for secondary_keyword in secondary_keywords:
-                        if secondary_keyword in text:
-                            secondary_keyword_matched = True
-                            break
+                    secondary_keyword_matched = any(secondary_keyword.lower() in text.lower() for secondary_keyword in secondary_keywords)
                     if not secondary_keyword_matched:
                         signature_pages.append(page_num)
             else:
                 images = convert_from_path(pdf_path, first_page=page_num + 1, last_page=page_num + 1)
                 for image in images:
                     ocr_text = image_to_string(image).strip()
-                    primary_keyword_matched = False
-                    for pattern in primary_keyword_patterns:
-                        if pattern.search(ocr_text):
-                            primary_keyword_matched = True
-                            break
+                    primary_keyword_matched = any(pattern.search(ocr_text) for pattern in primary_keyword_patterns)
                     if primary_keyword_matched:
-                        secondary_keyword_matched = False
-                        for secondary_keyword in secondary_keywords:
-                            if secondary_keyword in ocr_text:
-                                secondary_keyword_matched = True
-                                break
+                        secondary_keyword_matched = any(secondary_keyword.lower() in ocr_text.lower() for secondary_keyword in secondary_keywords)
                         if not secondary_keyword_matched:
                             signature_pages.append(page_num)
         except Exception as e:
@@ -151,17 +139,15 @@ def upload_file():
                     output_filepath = os.path.join(app.config['OUTPUT_FOLDER'], output_filename)
                     extract_signature_pages(reader, signature_pages, output_filepath)
                     download_links.append(output_filename)
-                    if len(signature_pages) == 1:
-                        messages.append(
-                            f'Processed {filename}: Extracted signature page to {output_filename}. 1 signature')
-                    else:
-                        messages.append(
-                            f'Processed {filename}: Extracted signature pages to {output_filename}. {len(signature_pages)} signatures')
+                    messages.append(
+                        f'Processed {filename}: Extracted signature pages to {output_filename}. {len(signature_pages)} signatures' if len(signature_pages) > 1 else f'Processed {filename}: Extracted signature page to {output_filename}. 1 signature')
                 else:
                     messages.append(f'Processed {filename}: No signature pages detected.')
+                    download_links.append(None)  # Add None for files with no signature pages
             except Exception as e:
                 logging.error(f"Error processing PDF file {filename}: {e}")
                 messages.append(f'Error processing {filename}.')
+                download_links.append(None)  # Add None for files with errors
 
     flash('\n'.join(messages))
     return jsonify({'status': 'success', 'messages': messages, 'download_links': download_links})
