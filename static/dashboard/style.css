@@ -1,0 +1,203 @@
+ body {
+         font-family: Arial, sans-serif;
+         margin: 0;
+         padding: 0;
+         background-color: #f4f4f4;
+         }
+         .container {
+         max-width: 800px;
+         margin: 0 auto;
+         padding: 20px;
+         background-color: #fff;
+         border-radius: 5px;
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+         }
+         h1 {
+         margin-bottom: 20px;
+         color: #007bff;
+         }
+         nav {
+         margin-bottom: 20px;
+         }
+         nav a {
+         display: inline-block;
+         padding: 10px 20px;
+         margin-right: 10px;
+         color: #007bff;
+         text-decoration: none;
+         background-color: #fff;
+         border: 2px solid #007bff;
+         border-radius: 5px;
+         transition: background-color 0.3s, color 0.3s;
+         }
+         nav a:hover {
+         background-color: #007bff;
+         color: #fff;
+         }
+         button {
+         display: inline-block;
+         margin-top: 10px;
+         padding: 10px 15px;
+         background: #007bff;
+         color: #fff;
+         text-decoration: none;
+         border-radius: 5px;
+         }
+         button:hover {
+         background-color: #0056b3;
+         }
+         .message {
+         margin-top: 20px;
+         font-size: 16px;
+         color: #007bff;
+         max-height: 200px;
+         overflow-y: auto;
+         padding: 10px;
+         border: 1px solid #ccc;
+         border-radius: 5px;
+         }
+         .notification-item {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         padding: 10px;
+         border-bottom: 1px solid #ddd;
+         }
+         .notification-item:last-child {
+         border-bottom: none;
+         }
+         .notification-text {
+         flex-grow: 1;
+         text-align: left;
+         margin-right: 10px;
+         }
+         .download-btn {
+         display: inline-block;
+         padding: 10px;
+         background: #28a745;
+         color: #fff;
+         text-decoration: none;
+         border-radius: 5px;
+         font-size: 12px;
+         }
+         .download-btn:hover {
+         background-color: #218838;
+         }
+         .progress-bar {
+         width: 100%;
+         background-color: #f3f3f3;
+         margin-bottom: 10px;
+         height: 20px;
+         border-radius: 5px;
+         display: none;
+         }
+         .progress-bar-fill {
+         height: 100%;
+         width: 0;
+         background-color: #007bff;
+         border-radius: 5px;
+         transition: width 0.2s;
+         }
+         .pagination {
+         margin-top: 20px;
+         text-align: left;
+         }
+         .pagination a {
+         display: inline-block;
+         padding: 10px 20px;
+         margin: 0 5px;
+         color: #007bff;
+         text-decoration: none;
+         border: 2px solid #007bff;
+         border-radius: 5px;
+         transition: background-color 0.3s, color 0.3s;
+         }
+         .pagination a:hover {
+         background-color: #007bff;
+         color: #fff;
+         }
+         .signature-count {
+         color: red;
+         font-weight: bold;
+         }
+         .pagination span {
+         display: inline-block;
+         padding: 10px 20px;
+         margin: 0 5px;
+         color: #007bff;
+         border: 2px solid #007bff;
+         border-radius: 5px;
+         background-color: #f4f4f4;
+         }
+         .buttons {
+         margin-top: 20px;
+         }
+         .buttons button {
+         margin: 0 10px; /* Adjusted margin for space between buttons */
+         }
+         .keyword-section {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         flex-wrap: wrap;
+         margin-top: 20px;
+         }
+         .keyword-section div {
+         margin: 5px;
+         padding: 10px;
+         border: 1px solid #ccc;
+         border-radius: 5px;
+         }
+         /* Add styles for toggle switch */
+         .switch {
+         position: relative;
+         display: inline-block;
+         width: 50px;
+         height: 20px;
+         }
+         .switch input {
+         opacity: 0;
+         width: 0;
+         height: 0;
+         }
+         .slider {
+         position: absolute;
+         cursor: pointer;
+         top: 0;
+         left: 0;
+         right: 0;
+         bottom: 0;
+         background-color: #ccc;
+         transition: .4s;
+         border-radius: 34px;
+         }
+         .slider:before {
+         position: absolute;
+         content: "";
+         height: 15px;
+         width: 15px;
+         left: 4px;
+         bottom: 3px;
+         background-color: white;
+         transition: .4s;
+         border-radius: 50%;
+         }
+         input:checked + .slider {
+         background-color: #2196F3;
+         }
+         input:checked + .slider:before {
+         transform: translateX(26px);
+         }
+         /* Style for hidden text inputs */
+         #manual-keywords {
+         display: none;
+         }
+         .keyword-section {
+         text-align: left; /* Align content to the left */
+         }
+         .buttons {
+         margin-top: 20px;
+         }
+         input[type="text"] {
+         width: 300px; /* Set the width as per your preference */
+         }
