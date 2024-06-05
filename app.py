@@ -2,6 +2,7 @@
 from PyPDF2 import PdfFileReader
 from flask import Flask, redirect, url_for, render_template, send_from_directory, request, send_file, jsonify
 from config import UPLOAD_FOLDER, OUTPUT_FOLDER, SECRET_KEY
+from notifications import get_notifications, get_all_files
 from upload import upload_file
 from signature_detection import signature_detector
 import zipfile
@@ -35,7 +36,6 @@ def get_keywords():
 
 @app.route('/notifications')
 def notifications():
-    from notifications import get_notifications  # Import inside the function to avoid circular import
     page = request.args.get('page', 1, type=int)
     notifications, total_pages = get_notifications(page=page, output_folder=app.config['OUTPUT_FOLDER'])
     return render_template('notifications.html', notifications=notifications, page=page, total_pages=total_pages)
@@ -94,6 +94,22 @@ def extract_signature_pages():
     signature_detector.extract_signature_pages(reader, pages, output_path)
     return jsonify(
         {'status': 'success', 'message': 'Signature pages extracted successfully', 'output_path': output_path})
+
+
+@app.route('/export-file-names')
+def export_file_names():
+    all_files = get_all_files(output_folder=app.config['OUTPUT_FOLDER'])
+    file_names = [os.path.basename(file) for file in all_files]
+    csv_content = "File Name, Date Processed, Signatures Found\n"
+
+    for file in file_names:
+        num_signatures = file.split('_')[0]  # Extract number of signatures from filename
+        csv_content += f"{file},2024-06-05\n"  # Replace with actual date processing logic
+
+    response = jsonify({'csv': csv_content})
+    response.headers['Content-Disposition'] = 'attachment; filename=processed_files.csv'
+    response.mimetype = 'text/csv'
+    return response
 
 
 if __name__ == '__main__':
