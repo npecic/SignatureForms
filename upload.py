@@ -42,7 +42,7 @@ def upload_file():
                 signatures_count.append(num_signatures)
 
                 if signature_pages:
-                    output_filename = f'{os.path.splitext(filename)[0]}_signatures.pdf'
+                    output_filename = f'{os.path.splitext(filename)[0]}_{num_signatures}_signatures.pdf'
                     output_filepath = os.path.join(OUTPUT_FOLDER, output_filename)
                     signature_detector.extract_signature_pages(reader, signature_pages, output_filepath)
                     download_links.append(output_filename)

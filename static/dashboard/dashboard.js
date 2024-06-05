@@ -6,8 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentKeywords = document.getElementById('current-keywords');
     const primaryKeywordsContainer = document.getElementById('primary-keywords-container');
     const secondaryKeywordsContainer = document.getElementById('secondary-keywords-container');
-    const addPrimaryKeywordButton = document.getElementById('add-primary-keyword');
-    const addSecondaryKeywordButton = document.getElementById('add-secondary-keyword');
     const primaryKeywordsList = document.getElementById('primary-keywords-list');
     const secondaryKeywordsList = document.getElementById('secondary-keywords-list');
 
@@ -28,22 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
             manualKeywords.style.display = 'none';
             localStorage.setItem('keywordToggle', 'default');
         }
-    });
-
-    addPrimaryKeywordButton.addEventListener('click', function() {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.name = 'primary_keywords[]';
-        input.placeholder = 'Enter primary keywords';
-        primaryKeywordsContainer.appendChild(input);
-    });
-
-    addSecondaryKeywordButton.addEventListener('click', function() {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.name = 'secondary_keywords[]';
-        input.placeholder = 'Enter secondary keywords';
-        secondaryKeywordsContainer.appendChild(input);
     });
 
     keywordForm.addEventListener('submit', function(event) {
