@@ -1,6 +1,9 @@
 #app.py
 from PyPDF2 import PdfFileReader
 from flask import Flask, redirect, url_for, render_template, send_from_directory, request, send_file, jsonify
+
+import config
+import utils
 from config import UPLOAD_FOLDER, OUTPUT_FOLDER, SECRET_KEY
 from notifications import get_notifications, get_all_files
 from upload import upload_file
@@ -96,21 +99,26 @@ def extract_signature_pages():
         {'status': 'success', 'message': 'Signature pages extracted successfully', 'output_path': output_path})
 
 
+def extract_signature_count(file_path):
+    pass
+
+
 @app.route('/export-file-names')
 def export_file_names():
-    all_files = get_all_files(output_folder=app.config['OUTPUT_FOLDER'])
-    file_names = [os.path.basename(file) for file in all_files]
-    csv_content = "File Name, Date Processed, Signatures Found\n"
+    output_folder = app.config['OUTPUT_FOLDER']
+    all_files = utils.get_all_files(output_folder)
+    processed_files = []
 
-    for file in file_names:
-        num_signatures = file.split('_')[0]  # Extract number of signatures from filename
-        csv_content += f"{file},2024-06-05\n"  # Replace with actual date processing logic
+    for file_path in all_files:
+        file_name = os.path.basename(file_path)
+        processed_time = os.path.getmtime(file_path)
+        processed_files.append({
+            "title": file_name,
+            "timestamp": processed_time
+        })
 
-    response = jsonify({'csv': csv_content})
-    response.headers['Content-Disposition'] = 'attachment; filename=processed_files.csv'
-    response.mimetype = 'text/csv'
-    return response
-
+    pdf_buffer = utils.generate_pdf(processed_files, output_folder)
+    return send_file(pdf_buffer, as_attachment=True, download_name='processed_files.pdf', mimetype='application/pdf')
 
 if __name__ == '__main__':
     app.run(debug=True)

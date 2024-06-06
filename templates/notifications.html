@@ -105,9 +105,7 @@
         .pagination a:hover:not(.active) {
             background-color: #ddd;
         }
-    </style>
 
-    <style>
         .download-btn {
             display: inline-block;
             padding: 5px;
@@ -137,8 +135,8 @@
                 <tr>
                     <th>File Name</th>
                     <th>Date Processed</th>
+                    <th>Sig</th>
                     <th>Download</th>
-
                 </tr>
             </thead>
             <tbody>
@@ -146,6 +144,8 @@
                 <tr>
                     <td>{{ notification.message }}</td>
                     <td>{{ notification.timestamp }}</td>
+                                        <td>{{ notification.signature }}</td>
+
                     <td>
                         {% if notification.download_link %}
                         <a class="download-btn" href="{{ url_for('download_file', filename=notification.download_link) }}" download>Download</a>
@@ -171,12 +171,16 @@
     <script>
         function exportFileNames() {
             fetch('/export-file-names')
-                .then(response => response.json())
-                .then(data => {
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
-                    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(data.csv);
-                    a.download = 'processed_files.csv';
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = 'processed_files.pdf';
+                    document.body.appendChild(a);
                     a.click();
+                    window.URL.revokeObjectURL(url);
                 })
                 .catch(error => console.error('Error exporting file names:', error));
         }

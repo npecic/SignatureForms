@@ -156,6 +156,24 @@
         font-weight: bold;
     }
 
+.progress-bar {
+    width: 100%;
+    background-color: #f3f3f3;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    display: none; /* Hide by default, show when uploading */
+}
+
+.progress-bar-fill {
+    height: 20px;
+    background-color: #4caf50;
+    width: 0;
+    transition: width 0.2s;
+    text-align: center;
+    color: white;
+    line-height: 20px; /* Center the text vertically */
+}
         .pagination span {
             display: inline-block;
             padding: 10px 20px;

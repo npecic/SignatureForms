@@ -1,9 +1,6 @@
 import os
 from datetime import datetime
 
-import os
-from datetime import datetime
-
 
 def get_notifications(page=1, per_page=10, output_folder=None):
     processed_files = []
@@ -13,7 +10,8 @@ def get_notifications(page=1, per_page=10, output_folder=None):
     paginated_files = all_files[start:end]
 
     for filename in paginated_files:
-        num_signatures = filename.split("signatures")[0].split("_")[-1]
+        # Extracting num_signatures from the filename
+        num_signatures = int(filename.split("_")[-2])
 
         try:
             processed_time = datetime.fromtimestamp(os.path.getmtime(os.path.join(output_folder, filename)))
@@ -23,7 +21,7 @@ def get_notifications(page=1, per_page=10, output_folder=None):
         processed_files.append({
             "title": "File Processed",
             "message": f"{filename}.",
-            "timestamp": processed_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "timestamp": processed_time.strftime("%Y-%m-%d %H:%M:%S"),  # Corrected format string
             "signature": f"{num_signatures}",
             "download_link": filename
         })
