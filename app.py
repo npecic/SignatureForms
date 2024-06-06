@@ -7,7 +7,7 @@ from flask import Flask, redirect, url_for, render_template, send_from_directory
 import config
 import utils
 from config import UPLOAD_FOLDER, OUTPUT_FOLDER, SECRET_KEY
-from notifications import get_notifications, get_all_files
+from notifications import get_notifications, get_all_notifications, get_all_files
 from upload import upload_file
 from signature_detection import signature_detector
 import zipfile
@@ -108,8 +108,6 @@ def extract_signature_pages():
 
 
 
-
-
 @app.route('/export-file-names')
 def export_file_names():
     output_folder = app.config['OUTPUT_FOLDER']
@@ -126,6 +124,13 @@ def export_file_names():
 
     pdf_buffer = utils.generate_pdf(processed_files, output_folder)
     return send_file(pdf_buffer, as_attachment=True, download_name='processed_files.pdf', mimetype='application/pdf')
+
+
+@app.route('/report')
+def report():
+    notifications = get_all_notifications(output_folder=app.config['OUTPUT_FOLDER'])
+    return render_template('report.html', notifications=notifications)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -8,6 +8,9 @@
 </head>
 <body>
     <div class="container">
+        <div class="top-left">
+            <button onclick="window.open('{{ url_for('report') }}', '_blank')">View HTML Report</button> <!-- New button to view the HTML report -->
+        </div>
         <div class="top-right">
             <button onclick="location.href='{{ url_for('download_all') }}'">Download All Files</button>
         </div>
