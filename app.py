@@ -1,4 +1,6 @@
 #app.py
+from datetime import datetime
+
 from PyPDF2 import PdfFileReader
 from flask import Flask, redirect, url_for, render_template, send_from_directory, request, send_file, jsonify
 
@@ -58,10 +60,16 @@ def download_file(filename):
 def download_all():
     from notifications import get_all_files  # Import inside the function to avoid circular import
     all_files = get_all_files(app.config['OUTPUT_FOLDER'])
-    with zipfile.ZipFile('all_files.zip', 'w') as zipf:
+
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")  # Current timestamp
+
+    zip_filename = f'all_files_{timestamp}.zip'  # Include timestamp in the filename
+
+    with zipfile.ZipFile(zip_filename, 'w') as zipf:
         for file in all_files:
             zipf.write(file, os.path.basename(file))
-    return send_file('all_files.zip', as_attachment=True)
+
+    return send_file(zip_filename, as_attachment=True)
 
 
 @app.route('/set_keywords', methods=['POST'])
@@ -75,7 +83,7 @@ def set_keywords():
         primary_keywords = ','.join(data.get('primary_keywords', []))
         secondary_keywords = ','.join(data.get('secondary_keywords', []))
         signature_detector.set_keywords(primary_keywords.split(','), secondary_keywords.split(','))
-        signature_detector.save_keywords_to_json('manualKeywords.json', primary_keywords.split(','), secondary_keywords.split(','))
+        signature_detector.save_keywords_to_json('data/manualKeywords.json', primary_keywords.split(','), secondary_keywords.split(','))
 
     return jsonify({'message': 'Keywords updated successfully'})
 
@@ -99,8 +107,7 @@ def extract_signature_pages():
         {'status': 'success', 'message': 'Signature pages extracted successfully', 'output_path': output_path})
 
 
-def extract_signature_count(file_path):
-    pass
+
 
 
 @app.route('/export-file-names')

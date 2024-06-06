@@ -4,157 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notifications</title>
-    <link rel="stylesheet" href="/static/styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            margin-bottom: 20px;
-            color: #007bff;
-        }
-
-        nav {
-            margin-bottom: 20px;
-        }
-
-        nav a {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-right: 10px;
-            color: #007bff;
-            text-decoration: none;
-            background-color: #fff;
-            border: 2px solid #007bff;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        nav a:hover {
-            background-color: #007bff;
-            color: #fff;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-
-        button {
-            padding: 10px 20px;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .pagination a {
-            color: #007bff;
-            padding: 8px 16px;
-            text-decoration: none;
-            border: 1px solid #ddd;
-            margin: 0 2px;
-        }
-
-        .pagination a.active {
-            background-color: #007bff;
-            color: white;
-            border: 1px solid #007bff;
-        }
-
-        .pagination a:hover:not(.active) {
-            background-color: #ddd;
-        }
-
-        .download-btn {
-            display: inline-block;
-            padding: 5px;
-            background: #28a745;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 12px; /* Adjust the font size */
-            float: right; /* Move the button to the right */
-        }
-
-        .download-btn:hover {
-            background-color: #218838;
-        }
-    </style>
+    <link rel="stylesheet" href="static/notifications/style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Notifications</h1>
-        <nav>
+        <div class="top-right">
+            <button onclick="location.href='{{ url_for('download_all') }}'">Download All Files</button>
+        </div>
+        <h1>Overview</h1>
+        <nav class="centered-nav">
             <a href="/dashboard">Dashboard</a>
             <a href="/upload">Upload Files</a>
-            <a href="{{ url_for('download_all') }}">Download All Files</a>
         </nav>
-        <table>
-            <thead>
-                <tr>
-                    <th>File Name</th>
-                    <th>Date Processed</th>
-                    <th>Sig</th>
-                    <th>Download</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for notification in notifications %}
-                <tr>
-                    <td>{{ notification.message }}</td>
-                    <td>{{ notification.timestamp }}</td>
-                                        <td>{{ notification.signature }}</td>
-
-                    <td>
-                        {% if notification.download_link %}
-                        <a class="download-btn" href="{{ url_for('download_file', filename=notification.download_link) }}" download>Download</a>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Date Processed</th>
+                        <th>Sig</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for notification in notifications %}
+                    <tr>
+                        <td class="message">{{ notification.message }}</td>
+                        <td>{{ notification.timestamp }}</td>
+                        <td>{{ notification.signature }}</td>
+                        <td>
+                            {% if notification.download_link %}
+                            <a class="download-btn" href="{{ url_for('download_file', filename=notification.download_link) }}" download>Download</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         <div class="pagination">
             {% if page > 1 %}
             <a href="?page={{ page - 1 }}">&laquo; Previous</a>
@@ -166,24 +53,10 @@
             <a href="?page={{ page + 1 }}">Next &raquo;</a>
             {% endif %}
         </div>
-        <button onclick="exportFileNames()">Export File Names</button>
+        <div class="centered-button">
+            <button onclick="exportFileNames()">Export File Names</button>
+        </div>
     </div>
-    <script>
-        function exportFileNames() {
-            fetch('/export-file-names')
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = url;
-                    a.download = 'processed_files.pdf';
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                })
-                .catch(error => console.error('Error exporting file names:', error));
-        }
-    </script>
+    <script src="/static/notifications/notifications.js"></script>
 </body>
 </html>

@@ -116,21 +116,9 @@ function displayFiles(page) {
 
 function updatePagination() {
     let totalPages = Math.ceil(processedFiles.length / filesPerPage);
-    let paginationHTML = '';
-
-    if (currentPage > 1) {
-        paginationHTML += `<a href="?page=${currentPage - 1}">&laquo; Previous</a>`;
-    }
-
-    for (let i = 1; i <= totalPages; i++) {
-        paginationHTML += `<a href="?page=${i}" class="${i === currentPage ? 'active' : ''}">${i}</a>`;
-    }
-
-    if (currentPage < totalPages) {
-        paginationHTML += `<a href="?page=${currentPage + 1}">Next &raquo;</a>`;
-    }
-
-    document.querySelector('.pagination').innerHTML = paginationHTML;
+    pageIndicator.innerText = `Page ${currentPage} of ${totalPages}`;
+    prevPage.style.display = currentPage > 1 ? 'inline-block' : 'none';
+    nextPage.style.display = currentPage < totalPages ? 'inline-block' : 'none';
 }
 
 

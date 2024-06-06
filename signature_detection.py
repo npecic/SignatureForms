@@ -19,7 +19,7 @@ class SignatureDetector:
 
     def load_default_keywords(self):
         """Load default keywords from the JSON file."""
-        self.set_keywords_from_json('defaultKeywords.json')
+        self.set_keywords_from_json('data/defaultKeywords.json')
 
     def set_keywords_from_json(self, json_path):
         """Load keywords from a JSON file."""
@@ -39,12 +39,12 @@ class SignatureDetector:
     @property
     def primary_keyword_patterns(self):
         """Compile primary keywords into regex patterns."""
-        return [re.compile(re.escape(keyword), re.IGNORECASE) for keyword in self.primary_keywords]
+        return [re.compile(re.escape(keyword)) for keyword in self.primary_keywords]
 
     @property
     def secondary_keyword_patterns(self):
         """Compile secondary keywords into regex patterns."""
-        return [re.compile(re.escape(keyword), re.IGNORECASE) for keyword in self.secondary_keywords]
+        return [re.compile(re.escape(keyword)) for keyword in self.secondary_keywords]
 
     def detect_signature_pages(self, pdf_reader, pdf_path):
         signature_pages = []
