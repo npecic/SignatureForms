@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
 from config import UPLOAD_FOLDER, OUTPUT_FOLDER, ALLOWED_EXTENSIONS
 from signature_detection import signature_detector
+import asyncio
 
 app = Flask(__name__)
 
@@ -37,14 +38,16 @@ def upload_file():
 
             try:
                 reader = PdfReader(filepath)
-                signature_pages = signature_detector.detect_signature_pages(reader, filepath)
+                # Run the asynchronous method using asyncio.run
+                signature_pages = asyncio.run(signature_detector.detect_signature_pages(reader, filepath))
                 num_signatures = len(signature_pages)
                 signatures_count.append(num_signatures)
 
                 if signature_pages:
                     output_filename = f'{os.path.splitext(filename)[0]}_{num_signatures}_signatures.pdf'
                     output_filepath = os.path.join(OUTPUT_FOLDER, output_filename)
-                    signature_detector.extract_signature_pages(reader, signature_pages, output_filepath)
+                    # Run the asynchronous method using asyncio.run
+                    asyncio.run(signature_detector.extract_signature_pages(reader, signature_pages, output_filepath))
                     download_links.append(output_filename)
                     messages.append(
                         f'Processed {filename}. Total number of signatures: <span class="signature-count">{num_signatures}</span> '

@@ -2,7 +2,7 @@ import shutil
 import tempfile
 from datetime import datetime
 
-from PyPDF2 import PdfFileReader
+from PyPDF2 import PdfFileReader, PdfReader
 from flask import Flask, redirect, url_for, render_template, send_from_directory, request, send_file, jsonify
 
 import utils
@@ -163,25 +163,25 @@ def set_keywords():
     return jsonify({'message': 'Keywords updated successfully'})
 
 
+
 @app.route('/detect_signature_pages', methods=['POST'])
-def detect_signature_pages():
-    data = request.json
+async def detect_signature_pages():
+    data = await request.json
     pdf_path = data['pdf_path']
-    pages = signature_detector.detect_signature_pages(pdf_path)
+    pdf_reader = PdfReader(pdf_path)
+    pages = await signature_detector.detect_signature_pages(pdf_reader, pdf_path)
     return jsonify({'pages': pages})
 
-
 @app.route('/extract_signature_pages', methods=['POST'])
-def extract_signature_pages():
-    data = request.json
+async def extract_signature_pages():
+    data = await request.json
     pdf_path = data['pdf_path']
     output_path = data['output_path']
-    reader = PdfFileReader(pdf_path)
-    pages = signature_detector.detect_signature_pages(pdf_path)
-    signature_detector.extract_signature_pages(reader, pages, output_path)
+    reader = PdfReader(pdf_path)
+    pages = await signature_detector.detect_signature_pages(reader, pdf_path)
+    await signature_detector.extract_signature_pages(reader, pages, output_path)
     return jsonify(
         {'status': 'success', 'message': 'Signature pages extracted successfully', 'output_path': output_path})
-
 
 @app.route('/export-file-names')
 def export_file_names():

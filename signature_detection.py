@@ -4,6 +4,8 @@ import logging
 from PyPDF2 import PdfReader, PdfWriter
 from pytesseract import image_to_string
 from pdf2image import convert_from_path
+import asyncio
+import aiofiles
 
 class SignatureDetector:
     def __init__(self):
@@ -27,13 +29,13 @@ class SignatureDetector:
         self.primary_keywords = data.get('primary_keywords', [])
         self.secondary_keywords = data.get('secondary_keywords', [])
 
-    def save_keywords_to_json(self, json_path, primary_keywords, secondary_keywords):
+    async def save_keywords_to_json(self, json_path, primary_keywords, secondary_keywords):
         """Save keywords to a JSON file."""
-        with open(json_path, 'w') as file:
-            json.dump({
+        async with aiofiles.open(json_path, 'w') as file:
+            await file.write(json.dumps({
                 'primary_keywords': primary_keywords,
                 'secondary_keywords': secondary_keywords
-            }, file)
+            }))
 
     @property
     def primary_keyword_patterns(self):
@@ -45,7 +47,7 @@ class SignatureDetector:
         """Compile secondary keywords into regex patterns."""
         return [re.compile(re.escape(keyword)) for keyword in self.secondary_keywords]
 
-    def detect_signature_pages(self, pdf_reader, pdf_path):
+    async def detect_signature_pages(self, pdf_reader, pdf_path):
         signature_pages = []
 
         for page_num in range(len(pdf_reader.pages)):
@@ -77,12 +79,16 @@ class SignatureDetector:
 
         return signature_pages
 
-    def extract_signature_pages(self, reader, page_nums, output_filepath):
+    async def extract_signature_pages(self, reader, page_nums, output_filepath):
         writer = PdfWriter()
         for page_num in page_nums:
             writer.add_page(reader.pages[page_num])
-        with open(output_filepath, 'wb') as output_pdf:
+        # Write to a temporary file synchronously, then read asynchronously
+        temp_output_filepath = output_filepath + '.tmp'
+        with open(temp_output_filepath, 'wb') as output_pdf:
             writer.write(output_pdf)
+        async with aiofiles.open(temp_output_filepath, 'rb') as temp_output_pdf, aiofiles.open(output_filepath, 'wb') as final_output_pdf:
+            await final_output_pdf.write(await temp_output_pdf.read())
 
 # Create an instance of the SignatureDetector
 signature_detector = SignatureDetector()

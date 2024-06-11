@@ -20,8 +20,12 @@ function fetchMismatchedFiles(folder1, folder2) {
     .then(response => response.json())
     .then(data => {
         mismatchedFiles = data.mismatch_pdfs;
-        displayFiles(1);
-        updatePagination();
+        if (mismatchedFiles.length === 0) {
+            displayNoMismatchesMessage();
+        } else {
+            displayFiles(1);
+            updatePagination();
+        }
     })
     .catch(error => console.error('Error fetching mismatched files:', error));
 }
@@ -41,6 +45,14 @@ function displayFiles(page) {
         `;
         mismatchList.appendChild(row);
     });
+}
+
+function displayNoMismatchesMessage() {
+    const mismatchList = document.getElementById('mismatchList');
+    mismatchList.innerHTML = '<tr><td colspan="2">No mismatched files found.</td></tr>';
+
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = ''; // Clear pagination if no mismatched files
 }
 
 function updatePagination() {
