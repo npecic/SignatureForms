@@ -6,5 +6,6 @@ load_dotenv()
 
 UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')
 OUTPUT_FOLDER = os.getenv('OUTPUT_FOLDER', 'outputs')
+MISMATCH_FOLDER = os.getenv('MISMATCH_DIR', 'misMatch')
 ALLOWED_EXTENSIONS = {'pdf'}
 SECRET_KEY = os.getenv('SECRET_KEY', 'supersecretkey')

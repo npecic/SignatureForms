@@ -5,17 +5,16 @@ from PyPDF2 import PdfReader, PdfWriter
 from pytesseract import image_to_string
 from pdf2image import convert_from_path
 
-
 class SignatureDetector:
     def __init__(self):
         self.primary_keywords = []
         self.secondary_keywords = []
         self.load_default_keywords()
 
-    def set_keywords(self, primary_keywords, secondary_keywords):
+    def set_keywords(self, primary_keywords, secondary_keywords=None):
         """Set the primary and secondary keywords."""
         self.primary_keywords = primary_keywords
-        self.secondary_keywords = secondary_keywords
+        self.secondary_keywords = secondary_keywords if secondary_keywords is not None else []
 
     def load_default_keywords(self):
         """Load default keywords from the JSON file."""

@@ -1,13 +1,14 @@
-#app.py
+import shutil
+import tempfile
 from datetime import datetime
 
 from PyPDF2 import PdfFileReader
 from flask import Flask, redirect, url_for, render_template, send_from_directory, request, send_file, jsonify
 
-import config
 import utils
-from config import UPLOAD_FOLDER, OUTPUT_FOLDER, SECRET_KEY
+from config import UPLOAD_FOLDER, OUTPUT_FOLDER, SECRET_KEY, MISMATCH_FOLDER
 from notifications import get_notifications, get_all_notifications, get_all_files
+from pdf_compare import compare_pdf_folders
 from upload import upload_file
 from signature_detection import signature_detector
 import zipfile
@@ -16,6 +17,7 @@ import os
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
+app.config['MISMATCH_DIR'] = MISMATCH_FOLDER
 app.secret_key = SECRET_KEY  # Required for flashing messages
 
 
@@ -28,6 +30,70 @@ def index():
 def dashboard():
     return render_template('dashboard.html')
 
+
+@app.route('/compare')
+def compare():
+    return render_template('compare.html')
+
+
+@app.route('/compare_pdfs', methods=['POST'])
+def compare_pdfs_route():
+    data = request.json
+    folder1 = data.get('folder1')
+    folder2 = data.get('folder2')
+
+    if not folder1 or not folder2:
+        return jsonify({"error": "Both folder paths are required"}), 400
+
+    mismatch_dir = 'misMatch'
+    mismatches = compare_pdf_folders(folder1, folder2, mismatch_dir)
+
+    return jsonify({"mismatch_pdfs": mismatches})
+
+@app.route('/clear_mismatched_folder', methods=['POST'])
+def clear_mismatched_folder():
+    try:
+        mismatch_dir = app.config['MISMATCH_DIR']
+        if os.path.exists(mismatch_dir):
+            shutil.rmtree(mismatch_dir)
+            os.makedirs(mismatch_dir)  # Recreate the folder after deletion
+        return jsonify({"success": True})
+    except Exception as e:
+        print(f"Error clearing mismatched folder: {e}")
+        return jsonify({"success": False})
+
+@app.route('/mismatched_files/<filename>')
+def download_mismatch_file(filename):
+    return send_from_directory(app.config['MISMATCH_DIR'], filename, as_attachment=True, mimetype='application/pdf')
+
+@app.route('/download_all_mismatched')
+def download_all_mismatched():
+    # Get all files in the mismatched folder
+    mismatched_files = os.listdir(app.config['MISMATCH_DIR'])
+
+    # Create a timestamp for the zip file
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+    # Define the zip filename
+    zip_filename = f'mismatched_files_{timestamp}.zip'
+
+    # Create a temporary directory to store the files to be zipped
+    temp_dir = tempfile.mkdtemp()
+
+    # Copy all mismatched files to the temporary directory
+    for filename in mismatched_files:
+        shutil.copy(os.path.join(app.config['MISMATCH_DIR'], filename), temp_dir)
+
+    # Create the zip file
+    with zipfile.ZipFile(zip_filename, 'w') as zipf:
+        for file in os.listdir(temp_dir):
+            zipf.write(os.path.join(temp_dir, file), file)
+
+    # Remove the temporary directory
+    shutil.rmtree(temp_dir)
+
+    # Send the zip file as an attachment
+    return send_file(zip_filename, as_attachment=True)
 
 @app.route('/get_keywords')
 def get_keywords():
@@ -80,12 +146,22 @@ def set_keywords():
     if keyword_option == 'default':
         signature_detector.load_default_keywords()
     else:
-        primary_keywords = ','.join(data.get('primary_keywords', []))
-        secondary_keywords = ','.join(data.get('secondary_keywords', []))
-        signature_detector.set_keywords(primary_keywords.split(','), secondary_keywords.split(','))
-        signature_detector.save_keywords_to_json('data/manualKeywords.json', primary_keywords.split(','), secondary_keywords.split(','))
+        primary_keywords = ';'.join(data.get('primary_keywords', []))
+        secondary_keywords = ';'.join(data.get('secondary_keywords', []))
+
+        # If secondary_keywords is an empty string, set it to an empty list
+        if secondary_keywords == "":
+            secondary_keywords_list = []
+        else:
+            secondary_keywords_list = secondary_keywords.split(';')
+
+        primary_keywords_list = primary_keywords.split(';')
+
+        signature_detector.set_keywords(primary_keywords_list, secondary_keywords_list)
+        signature_detector.save_keywords_to_json('data/manualKeywords.json', primary_keywords_list, secondary_keywords_list)
 
     return jsonify({'message': 'Keywords updated successfully'})
+
 
 @app.route('/detect_signature_pages', methods=['POST'])
 def detect_signature_pages():
@@ -105,7 +181,6 @@ def extract_signature_pages():
     signature_detector.extract_signature_pages(reader, pages, output_path)
     return jsonify(
         {'status': 'success', 'message': 'Signature pages extracted successfully', 'output_path': output_path})
-
 
 
 @app.route('/export-file-names')
@@ -130,6 +205,8 @@ def export_file_names():
 def report():
     notifications = get_all_notifications(output_folder=app.config['OUTPUT_FOLDER'])
     return render_template('report.html', notifications=notifications)
+
+
 
 
 if __name__ == '__main__':

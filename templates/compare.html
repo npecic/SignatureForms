@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare PDF Files</title>
+    <!-- <link rel="stylesheet" href="/static/styles.css"> -->
+    <link rel="stylesheet" href="/static/compare/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="top-left">
+            <button onclick="clearMismatchedFolder()">Clear Mismatched Folder</button>
+        </div>
+        <div class="top-right">
+            <button onclick="window.location.href='/download_all_mismatched'">Download All (ZIP)</button>
+        </div>
+        <h1>Compare PDF Files</h1>
+        <nav class="centered-nav">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/upload">Upload</a>
+            <a href="/notifications">Overview</a>
+        </nav>
+        <form id="compareForm" method="POST" action="/compare_pdfs">
+            <div>
+                <label for="folder1">Old Forms:</label>
+                <input type="text" id="folder1" name="folder1" required>
+                <button type="button" onclick="document.getElementById('folder1Input').click()">Browse</button>
+                <input type="file" id="folder1Input" name="folder1Input" webkitdirectory style="display: none;" onchange="updatePath('folder1', this)">
+            </div>
+            <div>
+                <label for="folder2">New Forms:</label>
+                <input type="text" id="folder2" name="folder2" required>
+                <button type="button" onclick="document.getElementById('folder2Input').click()">Browse</button>
+                <input type="file" id="folder2Input" name="folder2Input" webkitdirectory style="display: none;" onchange="updatePath('folder2', this)">
+            </div>
+            <button type="submit" class="compare-btn">Compare</button>
+        </form>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Download</th>
+            </tr>
+        </thead>
+        <tbody id="mismatchList">
+            <!-- Mismatched files will be displayed here -->
+        </tbody>
+    </table>
+</div>
+<div class="pagination" id="pagination">
+    <!-- Pagination links will be displayed here -->
+</div>
+    </div>
+    <script>
+        function updatePath(inputId, inputElement) {
+            let fullPath = '';
+            if (inputElement.files.length > 0) {
+                fullPath = inputElement.files[0].webkitRelativePath.split('/')[0];
+                if (inputElement.files[0].webkitRelativePath.includes('\\')) {
+                    fullPath = inputElement.files[0].webkitRelativePath.split('\\')[0];
+                }
+                document.getElementById(inputId).value = fullPath;
+            }
+        }
+
+        function clearMismatchedFolder() {
+            fetch('/clear_mismatched_folder', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Mismatched folder cleared successfully.');
+                } else {
+                    alert('Failed to clear mismatched folder.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while clearing the mismatched folder.');
+            });
+        }
+    </script>
+    <script src="/static/compare/compare.js"></script>
+</body>
+</html>
