@@ -53,14 +53,16 @@ def compare_pdfs_route():
 @app.route('/clear_mismatched_folder', methods=['POST'])
 def clear_mismatched_folder():
     try:
-        mismatch_dir = app.config['MISMATCH_DIR']
-        if os.path.exists(mismatch_dir):
-            shutil.rmtree(mismatch_dir)
-            os.makedirs(mismatch_dir)  # Recreate the folder after deletion
-        return jsonify({"success": True})
+        # Remove all files in the upload directory
+        for filename in os.listdir(MISMATCH_FOLDER):
+            file_path = os.path.join(MISMATCH_FOLDER, filename)
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        return jsonify({"status": "success"}), 200
     except Exception as e:
-        print(f"Error clearing mismatched folder: {e}")
-        return jsonify({"success": False})
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/mismatched_files/<filename>')
 def download_mismatch_file(filename):
@@ -120,6 +122,34 @@ def upload():
 @app.route('/uploads/<filename>')
 def download_file(filename):
     return send_from_directory(app.config['OUTPUT_FOLDER'], filename)
+
+@app.route('/clear_upload_dir', methods=['POST'])
+def clear_upload_dir():
+    try:
+        # Remove all files in the upload directory
+        for filename in os.listdir(UPLOAD_FOLDER):
+            file_path = os.path.join(UPLOAD_FOLDER, filename)
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        return jsonify({"status": "success"}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/clear_output_directory', methods=['POST'])
+def clear_output_directory():
+    try:
+        # Remove all files in the output directory
+        for filename in os.listdir(OUTPUT_FOLDER):
+            file_path = os.path.join(OUTPUT_FOLDER, filename)
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        return jsonify({"status": "success"}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 @app.route('/download-all')

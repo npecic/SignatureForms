@@ -1,15 +1,20 @@
 let dropArea = document.getElementById('drop-area');
 let fileInput = document.getElementById('fileElem');
 let progressBarFill = document.getElementById('progress-bar-fill');
+let processingProgressBarFill = document.getElementById('processing-progress-bar-fill');
+let processingProgressBar = document.getElementById('processing-progress-bar');
+let processingMessage = document.getElementById('processing-message');
+let uploadMessage = document.getElementById('upload-message');
 let message = document.getElementById('message');
 let uploadBtn = document.getElementById('uploadBtn');
 let prevPage = document.getElementById('prevPage');
 let nextPage = document.getElementById('nextPage');
 let pageIndicator = document.getElementById('pageIndicator');
+let clearUploadDirBtn = document.getElementById('clearUploadDirBtn');
 
 let currentPage = 1;
 let filesPerPage = 10;
-let processedFiles = []; // Assume this gets populated with the processed files
+let processedFiles = [];
 
 dropArea.addEventListener('dragover', (event) => {
     event.preventDefault();
@@ -50,7 +55,7 @@ function uploadFiles() {
         return;
     }
 
-    uploadBtn.disabled = true; // Disable the button during upload
+    uploadBtn.disabled = true;
 
     let formData = new FormData();
     for (let i = 0; i < files.length; i++) {
@@ -63,6 +68,7 @@ function uploadFiles() {
         if (event.lengthComputable) {
             let percentComplete = (event.loaded / event.total) * 100;
             document.getElementById('progress-bar').style.display = 'block';
+            uploadMessage.style.display = 'block';
             progressBarFill.style.width = percentComplete + '%';
             progressBarFill.innerText = Math.round(percentComplete) + '%';
         }
@@ -74,21 +80,43 @@ function uploadFiles() {
             if (response.status === 'success') {
                 let messages = response.messages;
                 let downloadLinks = response.download_links;
+                let totalFiles = messages.length;
+                let processedCount = 0;
+
+                progressBarFill.style.width = '0%';
+                document.getElementById('progress-bar').style.display = 'none';
+                uploadMessage.style.display = 'none';
+
+                processingProgressBar.style.display = 'block';
+                processingMessage.style.display = 'block';
+
                 processedFiles = messages.map((msg, index) => ({
                     filename: msg,
                     downloadLink: downloadLinks[index]
                 }));
-                displayFiles(currentPage);
-                updatePagination();
+
+                let processInterval = setInterval(() => {
+                    processedCount++;
+                    let processingPercentComplete = (processedCount / totalFiles) * 100;
+                    processingProgressBarFill.style.width = processingPercentComplete + '%';
+                    processingProgressBarFill.innerText = Math.round(processingPercentComplete) + '%';
+
+                    if (processedCount >= totalFiles) {
+                        clearInterval(processInterval);
+                        processingProgressBar.style.display = 'none';
+                        processingMessage.style.display = 'none';
+                        displayFiles(currentPage);
+                        updatePagination();
+                    }
+                }, 100);
+
             } else {
                 message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>${response.message}</strong></span></div>`;
             }
-            progressBarFill.style.width = '0%';
         } else {
             message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Upload failed</strong></span></div>`;
         }
-        uploadBtn.disabled = false; // Re-enable the button after upload completes
-        document.getElementById('progress-bar').style.display = 'none';
+        uploadBtn.disabled = false;
     };
 
     xhr.send(formData);
@@ -121,7 +149,6 @@ function updatePagination() {
     nextPage.style.display = currentPage < totalPages ? 'inline-block' : 'none';
 }
 
-
 prevPage.addEventListener('click', () => {
     if (currentPage > 1) {
         currentPage--;
@@ -139,8 +166,26 @@ nextPage.addEventListener('click', () => {
     }
 });
 
-// Initially display the first page if there are any processed files
 if (processedFiles.length > 0) {
     displayFiles(currentPage);
     updatePagination();
 }
+
+clearUploadDirBtn.addEventListener('click', () => {
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', '/clear_upload_dir');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = () => {
+        if (xhr.status === 200) {
+            let response = JSON.parse(xhr.responseText);
+            if (response.status === 'success') {
+                message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Upload directory cleared successfully.</strong></span></div>`;
+            } else {
+                message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Failed to clear upload directory.</strong></span></div>`;
+            }
+        } else {
+            message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Request failed</strong></span></div>`;
+        }
+    };
+    xhr.send();
+});

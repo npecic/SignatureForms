@@ -38,6 +38,26 @@ function displayFiles(page) {
         document.querySelector('tbody').innerHTML = `<tr><td colspan="4"><strong>No files to display.</strong></td></tr>`;
     }
 }
+
+        document.getElementById('clearOutputDirBtn').addEventListener('click', () => {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/clear_output_directory');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    let response = JSON.parse(xhr.responseText);
+                    if (response.status === 'success') {
+                        message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Upload directory cleared successfully.</strong></span></div>`;
+                    } else {
+                        message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Failed to clear upload directory.</strong></span></div>`;
+                    }
+                } else {
+                    message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Request failed</strong></span></div>`;
+                }
+            };
+            xhr.send();
+        });
+
 function exportFileNames() {
             fetch('/export-file-names')
                 .then(response => response.blob())

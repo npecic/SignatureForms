@@ -8,17 +8,23 @@
 </head>
 <body>
     <div class="container">
+
         <div class="top-left">
-            <button onclick="window.open('{{ url_for('report') }}', '_blank')">View HTML Report</button> <!-- New button to view the HTML report -->
+            <button id="clearOutputDirBtn">Clear Root Directory</button>
         </div>
         <div class="top-right">
             <button onclick="location.href='{{ url_for('download_all') }}'">Download All Files</button>
         </div>
+
         <h1>Overview</h1>
         <nav class="centered-nav">
             <a href="/dashboard">Dashboard</a>
             <a href="/upload">Upload Files</a>
         </nav>
+                        <div  class="message" id="message" ></div>
+                       <div style="margin-bottom: 15px;"></div>
+
+
         <div class="table-container">
             <table>
                 <thead>
@@ -58,8 +64,31 @@
         </div>
         <div class="centered-button">
             <button onclick="exportFileNames()">Export File Names</button>
+            <button onclick="window.open('{{ url_for('report') }}', '_blank')">View HTML Report</button>
         </div>
+
     </div>
+
     <script src="/static/notifications/notifications.js"></script>
+    <script>
+        document.getElementById('clearOutputDirBtn').addEventListener('click', () => {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/clear_output_directory');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    let response = JSON.parse(xhr.responseText);
+                    if (response.status === 'success') {
+                        message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Upload directory cleared successfully.</strong></span></div>`;
+                    } else {
+                        message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Failed to clear upload directory.</strong></span></div>`;
+                    }
+                } else {
+                    message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Request failed</strong></span></div>`;
+                }
+            };
+            xhr.send();
+        });
+    </script>
 </body>
 </html>

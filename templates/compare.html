@@ -9,8 +9,9 @@
 </head>
 <body>
     <div class="container">
+
         <div class="top-left">
-            <button onclick="clearMismatchedFolder()">Clear Mismatched Folder</button>
+            <button id="clearMismatchedFiles">Clear Mismatched Folder</button>
         </div>
         <div class="top-right">
             <button onclick="window.location.href='/download_all_mismatched'">Download All (ZIP)</button>
@@ -36,6 +37,8 @@
             </div>
             <button type="submit" class="compare-btn">Compare</button>
         </form>
+                                <div class="message" id="message"></div>
+
 <div class="table-container">
     <table>
         <thead>
@@ -65,23 +68,24 @@
             }
         }
 
-        function clearMismatchedFolder() {
-            fetch('/clear_mismatched_folder', {
-                method: 'POST'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Mismatched folder cleared successfully.');
+         document.getElementById('clearMismatchedFiles').addEventListener('click', () => {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/clear_mismatched_folder');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    let response = JSON.parse(xhr.responseText);
+                    if (response.status === 'success') {
+                        message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Mis-match directory cleared successfully.</strong></span></div>`;
+                    } else {
+                        message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Failed to clear mis-match directory.</strong></span></div>`;
+                    }
                 } else {
-                    alert('Failed to clear mismatched folder.');
+                    message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Request failed</strong></span></div>`;
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while clearing the mismatched folder.');
-            });
-        }
+            };
+            xhr.send();
+        });
     </script>
     <script src="/static/compare/compare.js"></script>
 </body>
