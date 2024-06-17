@@ -27,7 +27,7 @@ function fetchMismatchedFiles(folder1, folder2) {
             updatePagination();
         }
     })
-    .catch(error => console.error('Error fetching mismatched files:', error));
+    .catch(error => console.error('Error fetching mismatched folders:', error));
 }
 
 function displayFiles(page) {
@@ -35,21 +35,21 @@ function displayFiles(page) {
     const endIndex = startIndex + filesPerPage;
     const filesToDisplay = mismatchedFiles.slice(startIndex, endIndex);
 
-    const mismatchList = document.getElementById('mismatchList');
+    const mismatchList = document.getElementById('matchList');
     mismatchList.innerHTML = '';
     filesToDisplay.forEach(file => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td class="file-name">${file.message}</td>
-            <td class="download-link"><a href="/mismatched_files/${file.download_link}" class="download-btn" download="${file.download_link}">Download</a></td>
+            <td class="download-link"><a href="/matched_files/${file.download_link}" class="download-btn" download="${file.download_link}">Download</a></td>
         `;
         mismatchList.appendChild(row);
     });
 }
 
 function displayNoMismatchesMessage() {
-    const mismatchList = document.getElementById('mismatchList');
-    mismatchList.innerHTML = '<tr><td colspan="2">No mismatched files found.</td></tr>';
+    const mismatchList = document.getElementById('matchList');
+    mismatchList.innerHTML = '<tr><td colspan="2">No matched files found.</td></tr>';
 
     const pagination = document.getElementById('pagination');
     pagination.innerHTML = ''; // Clear pagination if no mismatched files

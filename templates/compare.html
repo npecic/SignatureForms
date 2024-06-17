@@ -9,22 +9,28 @@
 </head>
 <body>
     <div class="container">
-
         <div class="top-left">
-            <button id="clearMismatchedFiles">Clear Mismatched Folder</button>
+            <select id="clearDropdown" onchange="handleClear(this)">
+                <option value="">Select Clear Action</option>
+                <option value="clearMismatchedFiles">Clear Mismatched Folder</option>
+                <option value="clearMatchedFiles">Clear Matched Folder</option>
+            </select>
         </div>
         <div class="top-right">
-            <button onclick="window.location.href='/download_all_mismatched'">Download All (ZIP)</button>
+            <select id="downloadDropdown" onchange="handleDownload(this)">
+                <option value="">Select Download</option>
+                <option value="/download_all_mismatched">Download All MM (ZIP)</option>
+                <option value="/download_all_matched">Download All M (ZIP)</option>
+            </select>
         </div>
         <h1>Compare PDF Files</h1>
         <nav class="centered-nav">
             <a href="/dashboard">Dashboard</a>
-            <a href="/upload">Upload</a>
-            <a href="/notifications">Overview</a>
+            <a href="/manual_compare">View Image Comparison</a>
         </nav>
         <form id="compareForm" method="POST" action="/compare_pdfs">
             <div>
-                <label for="folder1">Old Forms:</label>
+                <label for="folder1">Baseline:</label>
                 <input type="text" id="folder1" name="folder1" required>
                 <button type="button" onclick="document.getElementById('folder1Input').click()">Browse</button>
                 <input type="file" id="folder1Input" name="folder1Input" webkitdirectory style="display: none;" onchange="updatePath('folder1', this)">
@@ -37,24 +43,23 @@
             </div>
             <button type="submit" class="compare-btn">Compare</button>
         </form>
-                                <div class="message" id="message"></div>
-
-<div class="table-container">
-    <table>
-        <thead>
-            <tr>
-                <th>File Name</th>
-                <th>Download</th>
-            </tr>
-        </thead>
-        <tbody id="mismatchList">
-            <!-- Mismatched files will be displayed here -->
-        </tbody>
-    </table>
-</div>
-<div class="pagination" id="pagination">
-    <!-- Pagination links will be displayed here -->
-</div>
+        <div class="message" id="message"></div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody id="matchList">
+                    <!-- Mismatched files will be displayed here -->
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination" id="pagination">
+            <!-- Pagination links will be displayed here -->
+        </div>
     </div>
     <script>
         function updatePath(inputId, inputElement) {
@@ -68,24 +73,43 @@
             }
         }
 
-         document.getElementById('clearMismatchedFiles').addEventListener('click', () => {
-            let xhr = new XMLHttpRequest();
-            xhr.open('POST', '/clear_mismatched_folder');
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.onload = () => {
-                if (xhr.status === 200) {
-                    let response = JSON.parse(xhr.responseText);
-                    if (response.status === 'success') {
-                        message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Mis-match directory cleared successfully.</strong></span></div>`;
-                    } else {
-                        message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Failed to clear mis-match directory.</strong></span></div>`;
-                    }
-                } else {
-                    message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Request failed</strong></span></div>`;
+        function handleDownload(selectElement) {
+            const url = selectElement.value;
+            if (url) {
+                window.location.href = url;
+            }
+        }
+
+        function handleClear(selectElement) {
+            const action = selectElement.value;
+            if (action) {
+                let url;
+                if (action === 'clearMismatchedFiles') {
+                    url = '/clear_mismatched_folder';
+                } else if (action === 'clearMatchedFiles') {
+                    url = '/clear_matched_folder';
                 }
-            };
-            xhr.send();
-        });
+                if (url) {
+                    let xhr = new XMLHttpRequest();
+                    xhr.open('POST', url);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.onload = () => {
+                        let message = document.getElementById('message');
+                        if (xhr.status === 200) {
+                            let response = JSON.parse(xhr.responseText);
+                            if (response.status === 'success') {
+                                message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>${action.replace('clear', '').replace('Files', '')} directory cleared successfully.</strong></span></div>`;
+                            } else {
+                                message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Failed to clear ${action.replace('clear', '').replace('Files', '')} directory.</strong></span></div>`;
+                            }
+                        } else {
+                            message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Request failed</strong></span></div>`;
+                        }
+                    };
+                    xhr.send();
+                }
+            }
+        }
     </script>
     <script src="/static/compare/compare.js"></script>
 </body>

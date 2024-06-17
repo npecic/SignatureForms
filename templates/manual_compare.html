@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Compare</title>
+<!--    <link rel="stylesheet" href="/static/styles.css">-->
+    <link rel="stylesheet" href="/static/manual_compare/style.css">
+    <style>
+        #image-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .image-wrapper {
+            flex: 1;
+            text-align: center;
+            margin: 0 10px;
+        }
+
+        .image-wrapper img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+        }
+
+        #controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        #controls button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        #back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .message {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-left">
+            <select id="clearDropdown" onchange="handleClear(this)">
+                <option value="">Select Clear Action</option>
+                <option value="clear_compare_img">Clear Manual Compare IMGs</option>
+            </select>
+        </div>
+        <div id="controls">
+            <button id="prev-button">Prev</button>
+            <div id="image-container">
+                <div class="image-wrapper">
+                    <h2>Baseline</h2>
+                    <img id="original-image" src="" alt="Baseline">
+                </div>
+                <div class="image-wrapper">
+                    <h2>Changes</h2>
+                    <img id="bounding-box-image" src="" alt="Changes">
+                </div>
+            </div>
+            <button id="next-button">Next</button>
+        </div>
+        <a id="back-button" href="/compare">Back</a>
+        <div class="message" id="message"></div>
+    </div>
+    <script>
+        function handleClear(selectElement) {
+            const action = selectElement.value;
+            if (action) {
+                let url;
+                if (action === 'clear_compare_img') {
+                    url = '/clear_compare_img';
+                }
+
+                if (url) {
+                    let xhr = new XMLHttpRequest();
+                    xhr.open('POST', url);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.onload = () => {
+                        let message = document.getElementById('message');
+                        if (xhr.status === 200) {
+                            let response = JSON.parse(xhr.responseText);
+                            if (response.status === 'success') {
+                                message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>${action.replace('clear_', '').replace('_img', '').replace('_', ' ')} cleared successfully.</strong></span></div>`;
+                            } else {
+                                message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Failed to clear ${action.replace('clear_', '').replace('_img', '').replace('_', ' ')}.</strong></span></div>`;
+                            }
+                        } else {
+                            message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Request failed</strong></span></div>`;
+                        }
+                    };
+                    xhr.send();
+                }
+            }
+        }
+    </script>
+    <script src="/static/manual_compare/manual_compare.js"></script>
+</body>
+</html>
