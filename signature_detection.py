@@ -4,8 +4,9 @@ import logging
 from PyPDF2 import PdfReader, PdfWriter
 from pytesseract import image_to_string
 from pdf2image import convert_from_path
-import asyncio
 import aiofiles
+import os
+
 
 class SignatureDetector:
     def __init__(self):
@@ -83,12 +84,20 @@ class SignatureDetector:
         writer = PdfWriter()
         for page_num in page_nums:
             writer.add_page(reader.pages[page_num])
-        # Write to a temporary file synchronously, then read asynchronously
+
+        # Write to a temporary file
         temp_output_filepath = output_filepath + '.tmp'
-        with open(temp_output_filepath, 'wb') as output_pdf:
-            writer.write(output_pdf)
-        async with aiofiles.open(temp_output_filepath, 'rb') as temp_output_pdf, aiofiles.open(output_filepath, 'wb') as final_output_pdf:
-            await final_output_pdf.write(await temp_output_pdf.read())
+        try:
+            with open(temp_output_filepath, 'wb') as output_pdf:
+                writer.write(output_pdf)
+            async with aiofiles.open(temp_output_filepath, 'rb') as temp_output_pdf, aiofiles.open(output_filepath,
+                                                                                                   'wb') as final_output_pdf:
+                await final_output_pdf.write(await temp_output_pdf.read())
+        finally:
+            # Ensure the temporary file is removed
+            if os.path.exists(temp_output_filepath):
+                os.remove(temp_output_filepath)
+
 
 # Create an instance of the SignatureDetector
 signature_detector = SignatureDetector()

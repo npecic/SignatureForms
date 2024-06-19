@@ -1,9 +1,9 @@
+# pdf_compare.py
 import os
 import fitz  # PyMuPDF
 import shutil
 import numpy as np
 import cv2
-
 
 def compare_pdfs(pdf1_path, pdf2_path, mismatch_text=None):
     """Compare two PDF files and return True if their entire text content is the same, else False.
@@ -108,12 +108,10 @@ def compare_pdfs(pdf1_path, pdf2_path, mismatch_text=None):
             screenshot_dir = 'static/manual_compare_img/bounding_screenshot'
             if not os.path.exists(screenshot_dir):
                 os.makedirs(screenshot_dir)
-            screenshot_path = os.path.join(screenshot_dir, os.path.splitext(os.path.basename(pdf2_path))[
-                0] + f'_Page_{page_num + 1}.png')
+            screenshot_path = os.path.join(screenshot_dir, os.path.splitext(os.path.basename(pdf2_path))[0] + f'_Page_{page_num + 1}.png')
             cv2.imwrite(screenshot_path, img2_with_boxes)
 
     return text_match, pixmap_match
-
 
 def compare_pdf_folders(folder1, folder2, misMatch_dir, match_dir, mismatch_text=None):
     """List and move matched PDF files from folder2 to the match directory,
@@ -148,11 +146,3 @@ def compare_pdf_folders(folder1, folder2, misMatch_dir, match_dir, mismatch_text
             shutil.copy(pdf2_path, os.path.join(misMatch_dir, pdf_file))
 
     return matches
-
-# Example usage:
-# match_dir = 'path_to_match_dir'
-# misMatch_dir = 'path_to_misMatch_dir'
-# mismatch_text = 'specific text'  # Specify the text to check for mismatches
-# matched_files = compare_pdf_folders('path_to_folder1', 'path_to_folder2', misMatch_dir, match_dir, mismatch_text=mismatch_text)
-# for match in matched_files:
-#     print(match)

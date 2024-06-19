@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compare PDF Files</title>
-    <!-- <link rel="stylesheet" href="/static/styles.css"> -->
     <link rel="stylesheet" href="/static/compare/style.css">
 </head>
 <body>
@@ -19,8 +18,8 @@
         <div class="top-right">
             <select id="downloadDropdown" onchange="handleDownload(this)">
                 <option value="">Select Download</option>
-                <option value="/download_all_mismatched">Download All MM (ZIP)</option>
-                <option value="/download_all_matched">Download All M (ZIP)</option>
+                <option value="/download/mismatched">Download All MM (ZIP)</option>
+                <option value="/download/matched">Download All M (ZIP)</option>
             </select>
         </div>
         <h1>Compare PDF Files</h1>
@@ -32,14 +31,12 @@
             <div>
                 <label for="folder1">Baseline:</label>
                 <input type="text" id="folder1" name="folder1" required>
-                <button type="button" onclick="document.getElementById('folder1Input').click()">Browse</button>
-                <input type="file" id="folder1Input" name="folder1Input" webkitdirectory style="display: none;" onchange="updatePath('folder1', this)">
+                <input type="file" id="folder1Input" name="folder1Input" webkitdirectory directory style="display: none;" onchange="updatePath('folder1', this)">
             </div>
             <div>
                 <label for="folder2">New Forms:</label>
                 <input type="text" id="folder2" name="folder2" required>
-                <button type="button" onclick="document.getElementById('folder2Input').click()">Browse</button>
-                <input type="file" id="folder2Input" name="folder2Input" webkitdirectory style="display: none;" onchange="updatePath('folder2', this)">
+                <input type="file" id="folder2Input" name="folder2Input" webkitdirectory directory style="display: none;" onchange="updatePath('folder2', this)">
             </div>
             <button type="submit" class="compare-btn">Compare</button>
         </form>

@@ -13,7 +13,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/upload', methods=['GET', 'POST'])
-def upload_file():
+async def upload_file():
     if request.method == 'GET':
         return render_template('upload.html')
 
@@ -34,20 +34,18 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             filepath = os.path.join(UPLOAD_FOLDER, filename)
-            file.save(filepath)
+            file.save(filepath)  # Save file synchronously
 
             try:
                 reader = PdfReader(filepath)
-                # Run the asynchronous method using asyncio.run
-                signature_pages = asyncio.run(signature_detector.detect_signature_pages(reader, filepath))
+                signature_pages = await signature_detector.detect_signature_pages(reader, filepath)
                 num_signatures = len(signature_pages)
                 signatures_count.append(num_signatures)
 
                 if signature_pages:
                     output_filename = f'{os.path.splitext(filename)[0]}_{num_signatures}_signatures.pdf'
                     output_filepath = os.path.join(OUTPUT_FOLDER, output_filename)
-                    # Run the asynchronous method using asyncio.run
-                    asyncio.run(signature_detector.extract_signature_pages(reader, signature_pages, output_filepath))
+                    await signature_detector.extract_signature_pages(reader, signature_pages, output_filepath)
                     download_links.append(output_filename)
                     messages.append(
                         f'Processed {filename}. Total number of signatures: <span class="signature-count">{num_signatures}</span> '
