@@ -1,9 +1,9 @@
-# pdf_compare.py
 import os
-import fitz  # PyMuPDF
 import shutil
-import numpy as np
+import fitz  # PyMuPDF
 import cv2
+import numpy as np
+import logging
 
 def compare_pdfs(pdf1_path, pdf2_path, mismatch_text=None):
     """Compare two PDF files and return True if their entire text content is the same, else False.
@@ -12,6 +12,7 @@ def compare_pdfs(pdf1_path, pdf2_path, mismatch_text=None):
     doc2 = fitz.open(pdf2_path)
 
     if len(doc1) != len(doc2):
+        logging.debug(f'PDF length mismatch: {len(doc1)} != {len(doc2)}')
         return False, False
 
     text_match = True
@@ -27,6 +28,8 @@ def compare_pdfs(pdf1_path, pdf2_path, mismatch_text=None):
 
         if text1 != text2:
             text_match = False
+            logging.debug(f'Text mismatch on page {page_num + 1}')
+
             if mismatch_text and (mismatch_text in text1 or mismatch_text in text2):
                 text_match = False
 
@@ -35,6 +38,7 @@ def compare_pdfs(pdf1_path, pdf2_path, mismatch_text=None):
 
         if pix1.samples != pix2.samples:
             pixmap_match = False
+            logging.debug(f'Pixmap mismatch on page {page_num + 1}')
 
             # Convert pixmap to numpy arrays
             img1 = np.frombuffer(pix1.samples, dtype=np.uint8).reshape(pix1.h, pix1.w, pix1.n)
@@ -90,6 +94,7 @@ def compare_pdfs(pdf1_path, pdf2_path, mismatch_text=None):
 
             # Merge overlapping bounding boxes
             merged_boxes = merge_boxes(bounding_boxes)
+            logging.debug(f'Bounding boxes on page {page_num + 1}: {merged_boxes}')
 
             # Draw the merged bounding boxes on the image
             img2_with_boxes = img2.copy()
@@ -113,36 +118,38 @@ def compare_pdfs(pdf1_path, pdf2_path, mismatch_text=None):
 
     return text_match, pixmap_match
 
-def compare_pdf_folders(folder1, folder2, misMatch_dir, match_dir, mismatch_text=None):
-    """List and move matched PDF files from folder2 to the match directory,
-    and move mismatched PDF files to the mismatch directory.
-    Optionally, capture screenshots with bounding boxes around areas that don't match."""
-    if not os.path.exists(match_dir):
-        os.makedirs(match_dir)
-
-    if not os.path.exists(misMatch_dir):
-        os.makedirs(misMatch_dir)
-
-    folder1_files = set(f for f in os.listdir(folder1) if f.lower().endswith('.pdf'))
-    folder2_files = set(f for f in os.listdir(folder2) if f.lower().endswith('.pdf'))
-
-    common_files = folder1_files & folder2_files
-
+def compare_pdf_folders(folder1, folder2, mismatch_dir, match_dir):
+    mismatches = []
     matches = []
-    for pdf_file in common_files:
-        pdf1_path = os.path.join(folder1, pdf_file)
-        pdf2_path = os.path.join(folder2, pdf_file)
+    folder2_files = {os.path.basename(file): os.path.join(root, file) for root, _, files in os.walk(folder2) for file in files if file.endswith('.pdf')}
 
-        text_match, pixmap_match = compare_pdfs(pdf1_path, pdf2_path, mismatch_text)
+    for root, _, files in os.walk(folder1):
+        for file in files:
+            if file.endswith('.pdf'):
+                file1 = os.path.join(root, file)
+                file2 = folder2_files.get(file)
+                if file2:
+                    text_match, pixmap_match = compare_pdfs(file1, file2)
+                    if text_match and pixmap_match:
+                        match_path = os.path.join(match_dir, file)
+                        shutil.copyfile(file2, match_path)
+                        matches.append({
+                            "title": "Matched File",
+                            "message": f"{file}",
+                            "download_link": file
+                        })
+                        logging.debug(f'Match found: {file1} == {file2}')
+                    else:
+                        mismatch_path = os.path.join(mismatch_dir, file)
+                        shutil.copyfile(file2, mismatch_path)
+                        mismatches.append({
+                            "title": "Mismatched File",
+                            "message": f"{file}",
+                            "download_link": file
+                        })
+                        logging.debug(f'Mismatch found: {file1} != {file2}')
+                else:
+                    logging.debug(f'File missing in folder2: {file}')
 
-        if text_match and pixmap_match:
-            shutil.copy(pdf2_path, os.path.join(match_dir, pdf_file))
-            matches.append({
-                "title": "Matched File",
-                "message": f"{pdf_file}",
-                "download_link": pdf_file
-            })
-        else:
-            shutil.copy(pdf2_path, os.path.join(misMatch_dir, pdf_file))
+    return {"matches": matches, "mismatches": mismatches}
 
-    return matches
