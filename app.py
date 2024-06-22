@@ -1,24 +1,26 @@
 import logging
 import shutil
 import tempfile
+import threading
+import time
 from datetime import datetime
 import zipfile
 import os
-from flask import Flask, redirect, url_for, render_template, send_from_directory, request, send_file, jsonify, \
-    after_this_request, session
-from PyPDF2 import PdfFileReader, PdfReader
+from flask import Flask, redirect, url_for, render_template, send_from_directory, request, send_file, jsonify, after_this_request, session
+from PyPDF2 import PdfReader
 from werkzeug.utils import secure_filename
+from flask_socketio import SocketIO, emit
 
 import utils
-from config import UPLOAD_FOLDER, OUTPUT_FOLDER, SECRET_KEY, MISMATCH_FOLDER, MATCH_FOLDER, BASELINE_IMG_FOLDER, \
-    CHANGED_IMG_FOLDER, MAX_CONTENT_LENGTH
-from notifications import get_notifications, get_all_notifications, get_all_files
+from config import UPLOAD_FOLDER, OUTPUT_FOLDER, SECRET_KEY, MISMATCH_FOLDER, MATCH_FOLDER, BASELINE_IMG_FOLDER, CHANGED_IMG_FOLDER, MAX_CONTENT_LENGTH
+from notifications import get_notifications, get_all_notifications
 from pdf_compare import compare_pdf_folders
 from upload import upload_file
 from signature_detection import signature_detector
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
+socketio = SocketIO(app)
 
 # Load configuration from config.py
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -38,11 +40,12 @@ TEMP_DIR = os.path.join(ROOT_DIR, 'temp')
 if not os.path.exists(TEMP_DIR):
     os.makedirs(TEMP_DIR)
 
+async def update_progress(progress, message):
+    socketio.emit('progress_update', {'progress': progress, 'message': message})
 
 @app.route('/')
 async def index():
     return redirect(url_for('dashboard'))
-
 
 @app.route('/dashboard')
 async def dashboard():
@@ -53,15 +56,51 @@ async def dashboard():
 async def compare():
     return render_template('compare.html')
 
+@app.route('/upload_chunk', methods=['POST'])
+def upload_chunk():
+    chunk = request.files['chunk']
+    file_name = request.form['fileName']
+    chunk_number = int(request.form['chunkNumber'])
+    total_chunks = int(request.form['totalChunks'])
+    folder = request.form['folder']
+
+    if folder == 'folder1':
+        if 'temp_dir1' not in session:
+            session['temp_dir1'] = tempfile.mkdtemp(dir=app.config['UPLOAD_FOLDER'])
+        temp_dir = session['temp_dir1']
+    else:
+        if 'temp_dir2' not in session:
+            session['temp_dir2'] = tempfile.mkdtemp(dir=app.config['UPLOAD_FOLDER'])
+        temp_dir = session['temp_dir2']
+
+    os.makedirs(temp_dir, exist_ok=True)
+
+    chunk_save_path = os.path.join(temp_dir, f"{file_name}_chunk_{chunk_number}")
+    chunk.save(chunk_save_path)
+
+    if chunk_number == total_chunks - 1:
+        with open(os.path.join(temp_dir, file_name), 'wb') as final_file:
+            for i in range(total_chunks):
+                chunk_file_path = os.path.join(temp_dir, f"{file_name}_chunk_{i}")
+                with open(chunk_file_path, 'rb') as chunk_file:
+                    final_file.write(chunk_file.read())
+                os.remove(chunk_file_path)
+
+    return jsonify({'status': 'success'})
 
 @app.route('/upload_folders', methods=['POST'])
-def upload_folders():
+async def upload_folders():
     try:
         folder1_files = request.files.getlist('folder1')
         folder2_files = request.files.getlist('folder2')
 
-        temp_dir1 = tempfile.mkdtemp(dir=app.config['UPLOAD_FOLDER'])
-        temp_dir2 = tempfile.mkdtemp(dir=app.config['UPLOAD_FOLDER'])
+        if 'temp_dir1' not in session:
+            session['temp_dir1'] = tempfile.mkdtemp(dir=app.config['UPLOAD_FOLDER'])
+        if 'temp_dir2' not in session:
+            session['temp_dir2'] = tempfile.mkdtemp(dir=app.config['UPLOAD_FOLDER'])
+
+        temp_dir1 = session['temp_dir1']
+        temp_dir2 = session['temp_dir2']
 
         for file in folder1_files:
             filename = secure_filename(os.path.basename(file.filename))
@@ -71,19 +110,14 @@ def upload_folders():
             filename = secure_filename(os.path.basename(file.filename))
             file.save(os.path.join(temp_dir2, filename))
 
-        session['temp_dir1'] = temp_dir1
-        session['temp_dir2'] = temp_dir2
-
-        logging.debug(f'Created temporary directory for folder1: {temp_dir1}')
-        logging.debug(f'Created temporary directory for folder2: {temp_dir2}')
-
+        logging.debug(f'Files uploaded to temporary directories: {temp_dir1}, {temp_dir2}')
         return jsonify({'status': 'success'})
     except Exception as e:
         logging.error(f'Error in upload_folders: {str(e)}')
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/compare_pdfs', methods=['POST'])
-def compare_pdfs_route():
+async def compare_pdfs_route():
     try:
         temp_dir1 = session.get('temp_dir1')
         temp_dir2 = session.get('temp_dir2')
@@ -111,8 +145,9 @@ def download_compare_file(filetype, filename):
         return jsonify({"status": "error", "message": "Invalid file type"}), 400
 
     return send_from_directory(directory, filename)
+
 @app.route('/clear_mismatched_folder', methods=['POST'])
-def clear_mismatched_folder():
+async def clear_mismatched_folder():
     try:
         mismatch_dir = app.config['MISMATCH_DIR']
         logging.debug(f'Trying to clear mismatched folder at: {mismatch_dir}')
@@ -137,9 +172,8 @@ def clear_mismatched_folder():
         logging.error(f'Error in clear_mismatched_folder: {str(e)}')
         return jsonify({"status": "error", "message": str(e)}), 500
 
-
 @app.route('/clear_matched_folder', methods=['POST'])
-def clear_matched_folder():
+async def clear_matched_folder():
     try:
         match_dir = app.config['MATCH_DIR']
         logging.debug(f'Trying to clear matched folder at: {match_dir}')
@@ -164,7 +198,6 @@ def clear_matched_folder():
         logging.error(f'Error in clear_matched_folder: {str(e)}')
         return jsonify({"status": "error", "message": str(e)}), 500
 
-
 @app.route('/clear_compare_img', methods=['POST'])
 async def clear_compare_img_folder():
     folders_to_clear = [app.config['BASELINE_IMG'], app.config['CHANGED_IMG']]
@@ -180,17 +213,28 @@ async def clear_compare_img_folder():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+def delayed_cleanup(path, delay=10):
+    def cleanup():
+        time.sleep(delay)
+        try:
+            if os.path.exists(path):
+                shutil.rmtree(path)
+        except Exception as e:
+            app.logger.error(f'Error during delayed cleanup: {e}')
+
+    thread = threading.Thread(target=cleanup)
+    thread.start()
 
 @app.route('/download/<download_type>')
 def download_files(download_type):
     try:
-        if download_type == 'matched':
+        if (download_type == 'matched'):
             directory = app.config['MATCH_DIR']
             zip_prefix = 'matched_files'
-        elif download_type == 'mismatched':
+        elif (download_type == 'mismatched'):
             directory = app.config['MISMATCH_DIR']
             zip_prefix = 'mismatched_files'
-        elif download_type == 'all':
+        elif (download_type == 'all'):
             directory = app.config['OUTPUT_FOLDER']
             zip_prefix = 'all_files'
         else:
@@ -198,7 +242,8 @@ def download_files(download_type):
 
         files = os.listdir(directory)
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        temp_dir = tempfile.mkdtemp()
+
+        temp_dir = tempfile.mkdtemp(dir=os.path.dirname(os.path.abspath(__file__)))
         zip_filename = os.path.join(temp_dir, f'{zip_prefix}_{timestamp}.zip')
 
         with zipfile.ZipFile(zip_filename, 'w') as zipf:
@@ -208,18 +253,13 @@ def download_files(download_type):
 
         @after_this_request
         def remove_file(response):
-            try:
-                os.remove(zip_filename)
-                shutil.rmtree(temp_dir)
-            except Exception as e:
-                app.logger.error(f'Error removing or closing downloaded file handle: {e}')
+            delayed_cleanup(temp_dir)
             return response
 
         return send_file(zip_filename, as_attachment=True)
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
-
 
 @app.route('/get_keywords')
 async def get_keywords():
@@ -230,23 +270,19 @@ async def get_keywords():
         'secondary_keywords': secondary_keywords
     })
 
-
 @app.route('/notifications')
 async def notifications():
     page = request.args.get('page', 1, type=int)
     notifications, total_pages = await get_notifications(page=page, output_folder=app.config['OUTPUT_FOLDER'])
     return render_template('notifications.html', notifications=notifications, page=page, total_pages=total_pages)
 
-
 @app.route('/upload', methods=['GET', 'POST'])
 async def upload():
     return await upload_file()
 
-
 @app.route('/manual_compare')
 async def manual_compare():
     return render_template('manual_compare.html')
-
 
 @app.route('/api/get_compare_images', methods=['GET'])
 async def get_compare_images():
@@ -272,11 +308,9 @@ async def get_compare_images():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
 @app.route('/uploads/<filename>')
 async def download_file(filename):
     return send_from_directory(app.config['OUTPUT_FOLDER'], filename)
-
 
 @app.route('/clear_upload_dir', methods=['POST'])
 async def clear_upload_dir():
@@ -291,7 +325,6 @@ async def clear_upload_dir():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-
 @app.route('/clear_output_directory', methods=['POST'])
 async def clear_output_directory():
     try:
@@ -304,7 +337,6 @@ async def clear_output_directory():
         return jsonify({"status": "success"}), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
-
 
 @app.route('/set_keywords', methods=['POST'])
 async def set_keywords():
@@ -325,39 +357,32 @@ async def set_keywords():
 
     return jsonify({'message': 'Keywords updated successfully'})
 
-
 @app.route('/detect_signature_pages', methods=['POST'])
 async def detect_signature_pages():
-    data = request.get_json()  # Synchronous call
+    data = await request.get_json()  # Synchronous call
     pdf_path = data['pdf_path']
     pdf_reader = PdfReader(pdf_path)
     pages = await signature_detector.detect_signature_pages(pdf_reader, pdf_path)
     return jsonify({'pages': pages})
 
-
 @app.route('/extract_signature_pages', methods=['POST'])
 async def extract_signature_pages():
-    data = request.get_json()  # Synchronous call
+    data = await request.get_json()  # Synchronous call
     pdf_path = data['pdf_path']
     output_path = data['output_path']
     reader = PdfReader(pdf_path)
     pages = await signature_detector.detect_signature_pages(reader, pdf_path)
 
-    # Create a temporary directory to ensure no tmp files are left behind
     with tempfile.TemporaryDirectory() as temp_output_dir:
         temp_pdf_path = os.path.join(temp_output_dir, "extracted_signatures.pdf")
 
         try:
             await signature_detector.extract_signature_pages(reader, pages, temp_pdf_path)
-
-            # Move the final output to the specified output path
             shutil.move(temp_pdf_path, output_path)
 
-            return jsonify(
-                {'status': 'success', 'message': 'Signature pages extracted successfully', 'output_path': output_path})
+            return jsonify({'status': 'success', 'message': 'Signature pages extracted successfully', 'output_path': output_path})
         except Exception as e:
             return jsonify({'status': 'error', 'message': str(e)}), 500
-
 
 @app.route('/export-file-names')
 async def export_file_names():
@@ -376,12 +401,10 @@ async def export_file_names():
     pdf_buffer = utils.generate_pdf(processed_files, output_folder)
     return send_file(pdf_buffer, as_attachment=True, download_name='processed_files.pdf', mimetype='application/pdf')
 
-
 @app.route('/report')
 async def report():
     notifications = await get_all_notifications(output_folder=app.config['OUTPUT_FOLDER'])
     return render_template('report.html', notifications=notifications)
 
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app, debug=True)

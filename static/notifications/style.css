@@ -109,17 +109,16 @@ th {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-x: auto;
-    white-space: nowrap;
+    flex-wrap: wrap; /* Enable wrapping */
+    gap: 5px; /* Add gap between elements */
 }
 
 .pagination a {
-    padding: 10px 15px;
-    margin-right: 5px;
+    padding: 8px 12px;
     color: #007bff;
     text-decoration: none;
     background-color: #fff;
-    border: 2px solid #007bff;
+    border: 1px solid #007bff;
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
 }
@@ -135,6 +134,13 @@ th {
     border-color: #007bff;
 }
 
+/* Responsive design for small screens */
+@media screen and (max-width: 600px) {
+    .pagination a {
+        padding: 6px 10px;
+        margin: 2px;
+    }
+}
 button {
     padding: 10px 20px;
     border: none;

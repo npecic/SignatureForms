@@ -1,97 +1,99 @@
+document.addEventListener('DOMContentLoaded', function() {
+    let currentPage = 1;
+    const filesPerPage = 10;
+    const notifications = JSON.parse(document.getElementById('notifications-data').textContent);
 
-let fileInput = document.getElementById('fileElem');
+    function displayNotifications(page) {
+        const startIndex = (page - 1) * filesPerPage;
+        const endIndex = startIndex + filesPerPage;
+        const notificationsToDisplay = notifications.slice(startIndex, endIndex);
 
-let message = document.getElementById('message');
+        const notificationList = document.querySelector('tbody');
+        notificationList.innerHTML = '';
 
-let prevPage = document.getElementById('prevPage');
-let nextPage = document.getElementById('nextPage');
-let pageIndicator = document.getElementById('pageIndicator');
-
-
-
-function updateMessage() {
-    if (fileInput.files.length > 0) {
-        message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>${fileInput.files.length} file(s) selected.</strong> Ready to upload.</span></div>`;
-    } else {
-        message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>No files selected.</strong></span></div>`;
+        if (notificationsToDisplay.length > 0) {
+            notificationsToDisplay.forEach(notification => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="message">${notification.message}</td>
+                    <td>${notification.timestamp}</td>
+                    <td>${notification.signature}</td>
+                    <td>${notification.download_link ? `<a class="download-btn" href="/download/${notification.download_link}" download>Download</a>` : ''}</td>
+                `;
+                notificationList.appendChild(row);
+            });
+        } else {
+            notificationList.innerHTML = '<tr><td colspan="4"><strong>No notifications to display.</strong></td></tr>';
+        }
     }
-}
 
+    function updatePagination() {
+        const totalPages = Math.ceil(notifications.length / filesPerPage);
+        const pagination = document.querySelector('.pagination');
+        const pageSummary = document.getElementById('page-summary');
+        pageSummary.textContent = `Page ${currentPage} of ${totalPages}`;
+        pagination.innerHTML = '';
 
+        const maxPageLinks = 5;
+        let startPage = Math.max(currentPage - Math.floor(maxPageLinks / 2), 1);
+        let endPage = startPage + maxPageLinks - 1;
 
-function displayFiles(page) {
-    let startIndex = (page - 1) * filesPerPage;
-    let endIndex = startIndex + filesPerPage;
-    let filesToDisplay = processedFiles.slice(startIndex, endIndex);
-
-    if (filesToDisplay.length > 0) {
-        let messageHtml = '';
-        filesToDisplay.forEach((file) => {
-            messageHtml += `<tr><td>${file.filename}</td><td>${file.timestamp}</td><td>${file.signature}</td>`;
-            if (file.downloadLink) {
-                messageHtml += `<td><a href="/uploads/${file.downloadLink}" download class="download-btn">Download</a></td>`;
-            }
-            messageHtml += `</tr>`;
-        });
-        document.querySelector('tbody').innerHTML = messageHtml;
-    } else {
-        document.querySelector('tbody').innerHTML = `<tr><td colspan="4"><strong>No files to display.</strong></td></tr>`;
-    }
-}
-
-        document.getElementById('clearOutputDirBtn').addEventListener('click', () => {
-            let xhr = new XMLHttpRequest();
-            xhr.open('POST', '/clear_output_directory');
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.onload = () => {
-                if (xhr.status === 200) {
-                    let response = JSON.parse(xhr.responseText);
-                    if (response.status === 'success') {
-                        message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Upload directory cleared successfully.</strong></span></div>`;
-                    } else {
-                        message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Failed to clear upload directory.</strong></span></div>`;
-                    }
-                } else {
-                    message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Request failed</strong></span></div>`;
-                }
-            };
-            xhr.send();
-        });
-
-function exportFileNames() {
-            fetch('/export-file-names')
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = url;
-                    a.download = 'processed_files.pdf';
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                })
-                .catch(error => console.error('Error exporting file names:', error));
+        if (endPage > totalPages) {
+            endPage = totalPages;
+            startPage = Math.max(endPage - maxPageLinks + 1, 1);
         }
 
+        if (startPage > 1) {
+            const firstPageLink = document.createElement('a');
+            firstPageLink.href = '#';
+            firstPageLink.textContent = '1';
+            firstPageLink.className = 'page-link';
+            firstPageLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                currentPage = 1;
+                displayNotifications(currentPage);
+                updatePagination();
+            });
+            pagination.appendChild(firstPageLink);
 
-function updatePagination() {
-    let totalPages = Math.ceil(processedFiles.length / filesPerPage);
-    let paginationHtml = '';
-    for (let i = 1; i <= totalPages; i++) {
-        paginationHtml += `<a href="#" onclick="navigateToPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</a>`;
+            const ellipsis = document.createElement('span');
+            ellipsis.textContent = '...';
+            pagination.appendChild(ellipsis);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            const link = document.createElement('a');
+            link.href = '#';
+            link.textContent = i;
+            link.className = i === currentPage ? 'active' : '';
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                currentPage = i;
+                displayNotifications(currentPage);
+                updatePagination();
+            });
+            pagination.appendChild(link);
+        }
+
+        if (endPage < totalPages) {
+            const ellipsis = document.createElement('span');
+            ellipsis.textContent = '...';
+            pagination.appendChild(ellipsis);
+
+            const lastPageLink = document.createElement('a');
+            lastPageLink.href = '#';
+            lastPageLink.textContent = totalPages;
+            lastPageLink.className = 'page-link';
+            lastPageLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                currentPage = totalPages;
+                displayNotifications(currentPage);
+                updatePagination();
+            });
+            pagination.appendChild(lastPageLink);
+        }
     }
-    document.querySelector('.pagination').innerHTML = paginationHtml;
-}
 
-function navigateToPage(page) {
-    currentPage = page;
-    displayFiles(currentPage);
+    displayNotifications(currentPage);
     updatePagination();
-}
-
-// Initially display the first page if there are any processed files
-if (processedFiles.length > 0) {
-    displayFiles(currentPage);
-    updatePagination();
-}
+});

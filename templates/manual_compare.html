@@ -99,7 +99,7 @@
                         if (xhr.status === 200) {
                             let response = JSON.parse(xhr.responseText);
                             if (response.status === 'success') {
-                                message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>${action.replace('clear_', '').replace('_img', '').replace('_', ' ')} cleared successfully.</strong></span></div>`;
+                                message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Compare IMGs cleared successfully.</strong></span></div>`;
                             } else {
                                 message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Failed to clear ${action.replace('clear_', '').replace('_img', '').replace('_', ' ')}.</strong></span></div>`;
                             }

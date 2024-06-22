@@ -14,7 +14,7 @@ class SignatureDetector:
         self.secondary_keywords = []
         self.load_default_keywords()
 
-    def set_keywords(self, primary_keywords, secondary_keywords=None):
+    async def set_keywords(self, primary_keywords, secondary_keywords=None):
         """Set the primary and secondary keywords."""
         self.primary_keywords = primary_keywords
         self.secondary_keywords = secondary_keywords if secondary_keywords is not None else []

@@ -39,50 +39,81 @@ function updatePath(inputId, inputElement) {
 }
 
 function uploadAndCompareFolders(folder1Files, folder2Files) {
-    const formData = new FormData();
-    for (let file of folder1Files) {
-        formData.append('folder1', file);
+    const chunkSize = 1024 * 1024; // 1MB chunk size
+    let totalFiles = folder1Files.length + folder2Files.length;
+    let filesUploaded = 0;
+
+    function uploadFolder(folderFiles, folderName) {
+        Array.from(folderFiles).forEach(file => {
+            const totalChunks = Math.ceil(file.size / chunkSize);
+            let currentChunk = 0;
+
+            function uploadNextChunk() {
+                const start = currentChunk * chunkSize;
+                const end = Math.min(start + chunkSize, file.size);
+                const chunk = file.slice(start, end);
+
+                const formData = new FormData();
+                formData.append('chunk', chunk);
+                formData.append('fileName', file.name);
+                formData.append('chunkNumber', currentChunk);
+                formData.append('totalChunks', totalChunks);
+                formData.append('folder', folderName);
+
+                fetch('/upload_chunk', {
+                    method: 'POST',
+                    body: formData,
+                }).then(response => {
+                    if (response.ok) {
+                        currentChunk++;
+                        if (currentChunk < totalChunks) {
+                            uploadNextChunk();
+                        } else {
+                            filesUploaded++;
+                            updateProgressBar(filesUploaded, totalFiles, 50); // Update progress bar for uploads
+//                            console.log(`Upload complete for ${file.name}, total files uploaded: ${filesUploaded}`);
+                            if (filesUploaded === totalFiles) {
+                                console.log('All files uploaded. Starting comparison.');
+                                document.getElementById('progressBar').textContent = 'Upload completed. Comparing...'; // Update progress bar text
+                                fetchComparisonResults();
+                            }
+                        }
+                    } else {
+                        console.error(`Upload failed for ${file.name}`);
+                    }
+                }).catch(error => {
+                    console.error(`Error during fetch for ${file.name}`, error);
+                });
+            }
+
+            uploadNextChunk();
+        });
     }
-    for (let file of folder2Files) {
-        formData.append('folder2', file);
-    }
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/upload_folders', true);
+    uploadFolder(folder1Files, 'folder1');
+    uploadFolder(folder2Files, 'folder2');
+}
 
-    xhr.upload.onprogress = function(event) {
-        if (event.lengthComputable) {
-            const percentComplete = (event.loaded / event.total) * 50; // Upload progress max 50%
-            document.getElementById('progressBar').style.width = percentComplete + '%';
-            document.getElementById('progressBar').textContent = Math.floor(percentComplete) + '%';
-        }
-    };
-
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            document.getElementById('progressBar').textContent = 'Upload completed. Comparing...';
-            document.getElementById('progressBar').style.width = '50%'; // Set to 50% for comparison progress
-            fetchComparisonResults();
-        } else {
-            document.getElementById('progressBar').textContent = 'Upload failed.';
-        }
-    };
-
-    xhr.onerror = function() {
-        document.getElementById('progressBar').textContent = 'Upload failed.';
-    };
-
-    xhr.send(formData);
+function updateProgressBar(filesUploaded, totalFiles, maxPercent) {
+    const percentComplete = (filesUploaded / totalFiles) * maxPercent;
+    document.getElementById('progressBar').style.width = percentComplete + '%';
+    document.getElementById('progressBar').textContent = Math.floor(percentComplete) + '%';
 }
 
 function fetchComparisonResults() {
+    console.log('Fetching comparison results...');
     fetch('/compare_pdfs', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.status === 'error') {
             throw new Error(data.message);
@@ -90,7 +121,7 @@ function fetchComparisonResults() {
 
         matches = data.matches;
         mismatches = data.mismatches;
-        let percentComplete = 50;
+        let percentComplete = 50; // Start at 50% for comparison progress
         const interval = setInterval(() => {
             if (percentComplete < 100) {
                 percentComplete += 5;
@@ -99,6 +130,7 @@ function fetchComparisonResults() {
             } else {
                 clearInterval(interval);
                 document.getElementById('progressBar').textContent = 'Comparison completed.';
+                console.log('Comparison completed.');
             }
         }, 100);
 
@@ -131,7 +163,6 @@ function displayFiles(files, type) {
         resultList.appendChild(row);
     });
 }
-
 
 function displayNoResultsMessage() {
     const resultList = document.getElementById('matchList');

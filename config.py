@@ -15,4 +15,4 @@ FOLDER2_DIR = os.getenv('FOLDER2_DIR', 'folder2')
 
 ALLOWED_EXTENSIONS = {'pdf'}
 SECRET_KEY = os.getenv('SECRET_KEY', 'supersecretkey')
-MAX_CONTENT_LENGTH = 1200 * 1024 * 1024  # 600 MB
+MAX_CONTENT_LENGTH = 10 * 1024 * 1024 * 1024  # 10 GB

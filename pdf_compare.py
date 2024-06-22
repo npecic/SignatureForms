@@ -12,7 +12,7 @@ def compare_pdfs(pdf1_path, pdf2_path, mismatch_text=None):
     doc2 = fitz.open(pdf2_path)
 
     if len(doc1) != len(doc2):
-        logging.debug(f'PDF length mismatch: {len(doc1)} != {len(doc2)}')
+        # logging.debug(f'PDF length mismatch: {len(doc1)} != {len(doc2)}')
         return False, False
 
     text_match = True
@@ -28,7 +28,7 @@ def compare_pdfs(pdf1_path, pdf2_path, mismatch_text=None):
 
         if text1 != text2:
             text_match = False
-            logging.debug(f'Text mismatch on page {page_num + 1}')
+            # logging.debug(f'Text mismatch on page {page_num + 1}')
 
             if mismatch_text and (mismatch_text in text1 or mismatch_text in text2):
                 text_match = False
@@ -38,7 +38,7 @@ def compare_pdfs(pdf1_path, pdf2_path, mismatch_text=None):
 
         if pix1.samples != pix2.samples:
             pixmap_match = False
-            logging.debug(f'Pixmap mismatch on page {page_num + 1}')
+            # logging.debug(f'Pixmap mismatch on page {page_num + 1}')
 
             # Convert pixmap to numpy arrays
             img1 = np.frombuffer(pix1.samples, dtype=np.uint8).reshape(pix1.h, pix1.w, pix1.n)
@@ -94,7 +94,7 @@ def compare_pdfs(pdf1_path, pdf2_path, mismatch_text=None):
 
             # Merge overlapping bounding boxes
             merged_boxes = merge_boxes(bounding_boxes)
-            logging.debug(f'Bounding boxes on page {page_num + 1}: {merged_boxes}')
+            # logging.debug(f'Bounding boxes on page {page_num + 1}: {merged_boxes}')
 
             # Draw the merged bounding boxes on the image
             img2_with_boxes = img2.copy()
@@ -138,7 +138,7 @@ def compare_pdf_folders(folder1, folder2, mismatch_dir, match_dir):
                             "message": f"{file}",
                             "download_link": file
                         })
-                        logging.debug(f'Match found: {file1} == {file2}')
+                        # logging.debug(f'Match found: {file1} == {file2}')
                     else:
                         mismatch_path = os.path.join(mismatch_dir, file)
                         shutil.copyfile(file2, mismatch_path)
@@ -147,7 +147,7 @@ def compare_pdf_folders(folder1, folder2, mismatch_dir, match_dir):
                             "message": f"{file}",
                             "download_link": file
                         })
-                        logging.debug(f'Mismatch found: {file1} != {file2}')
+                        # logging.debug(f'Mismatch found: {file1} != {file2}')
                 else:
                     logging.debug(f'File missing in folder2: {file}')
 
