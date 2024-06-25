@@ -4,37 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload PDF Files</title>
-    <link rel="stylesheet" href="/static/styles.css">
     <link rel="stylesheet" href="/static/upload/style.css">
-    <style>
-        .section-title {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .progress-bar-fill {
-            background-color: #4caf50;
-            height: 30px;
-            color: white;
-            text-align: center;
-            line-height: 30px;
-        }
-        .top-right-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .container {
-            position: relative;
-            padding: 20px;
-        }
-    </style>
 </head>
 <body>
 <div class="container">
@@ -49,14 +19,14 @@
         <input type="file" id="fileElem" name="files" multiple>
     </div>
     <button id="uploadBtn" onclick="uploadFiles()">Upload</button>
-    <div class="message" id="message"></div>
+    <div class="message" id="message" style="text-align: center;"></div>
 
-    <div class="section-title" id="upload-message" style="display: none;">Uploading PDF files</div>
+    <div class="section-title" id="upload-message" style="display: none;"></div>
     <div class="progress-bar" id="progress-bar">
         <div class="progress-bar-fill" id="progress-bar-fill"></div>
     </div>
 
-    <div class="section-title" id="processing-message" style="display: none;">Processing PDF files</div>
+    <div class="section-title" id="processing-message" style="display: none;"></div>
     <div class="progress-bar" id="processing-progress-bar" style="display: none;">
         <div class="progress-bar-fill" id="processing-progress-bar-fill"></div>
     </div>

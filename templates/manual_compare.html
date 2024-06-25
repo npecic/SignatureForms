@@ -4,57 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manual Compare</title>
-<!--    <link rel="stylesheet" href="/static/styles.css">-->
     <link rel="stylesheet" href="/static/manual_compare/style.css">
-    <style>
-        #image-container {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin: 20px 0;
-        }
-
-        .image-wrapper {
-            flex: 1;
-            text-align: center;
-            margin: 0 10px;
-        }
-
-        .image-wrapper img {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ccc;
-        }
-
-        #controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        #controls button, #back-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-        }
-
-        #back-button {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-        }
-
-        .message {
-            margin-top: 20px;
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -78,11 +28,28 @@
             </div>
             <button class="buttonIMG" id="next-button">Next</button>
         </div>
+        <button id="fullscreen-button">Fullscreen</button>
         <a id="back-button" href="/compare">Back</a>
         <div class="message" id="message"></div>
     </div>
-    <script>
-        function handleClear(selectElement) {
+
+    <!-- Fullscreen container -->
+    <div id="fullscreen-container" class="fullscreen-container">
+        <div class="fullscreen-controls">
+            <button id="fullscreen-prev-button">❮</button>
+            <button id="fullscreen-next-button">❯</button>
+        </div>
+        <div class="image-wrapper">
+            <img id="fullscreen-original-image" src="" alt="Baseline">
+        </div>
+        <div class="image-wrapper">
+            <img id="fullscreen-bounding-box-image" src="" alt="Changes">
+        </div>
+    </div>
+
+    <script src="/static/manual_compare/manual_compare.js"></script>
+<script>
+    function handleClear(selectElement) {
             const action = selectElement.value;
             if (action) {
                 let url;
@@ -111,7 +78,6 @@
                 }
             }
         }
-    </script>
-    <script src="/static/manual_compare/manual_compare.js"></script>
+</script>
 </body>
 </html>

@@ -28,15 +28,16 @@ async def process_file(filepath):
         num_signatures = len(signature_pages)
 
         if signature_pages:
+            # Extract only the base name of the file without the folder path
             output_filename = f'{os.path.splitext(os.path.basename(filepath))[0]}_{num_signatures}_signatures.pdf'
             output_filepath = os.path.join(OUTPUT_FOLDER, output_filename)
             await signature_detector.extract_signature_pages(reader, signature_pages, output_filepath)
-            return f'Processed {filepath}. Total number of signatures: {num_signatures}', output_filename, num_signatures
+            return (f'Processed {os.path.basename(filepath)}.'f'<br>Total number of signatures: <span class="signature-count">{num_signatures}</span>'), output_filename, num_signatures
         else:
-            return f'Processed {filepath}: No signature pages detected.', None, num_signatures
+            return f'Processed {os.path.basename(filepath)}:<br>No signature pages detected.', None, num_signatures
     except Exception as e:
         logging.error(f"Error processing PDF file {filepath}: {e}")
-        return f'Error processing {filepath}.', None, 0
+        return f'Error processing {os.path.basename(filepath)}.', None, 0
 
 @app.route('/upload', methods=['GET', 'POST'])
 async def upload_file():

@@ -48,6 +48,14 @@ function updateMessage() {
     }
 }
 
+function showAnalyzingMessage() {
+    message.innerHTML = '<div class="notification-item"><span class="notification-text"><strong>Analyzing Files ...</strong></span></div>';
+}
+
+function showProcessingMessage() {
+    message.innerHTML = '<div class="notification-item"><span class="notification-text"><strong>Processing PDF files</strong></span></div>';
+}
+
 function uploadFiles() {
     let files = fileInput.files;
     if (files.length === 0) {
@@ -56,6 +64,7 @@ function uploadFiles() {
     }
 
     uploadBtn.disabled = true;
+    message.innerHTML = '<div class="notification-item"><span class="notification-text"><strong>Uploading PDF files</strong></span></div>';
 
     let formData = new FormData();
     for (let i = 0; i < files.length; i++) {
@@ -71,6 +80,10 @@ function uploadFiles() {
             uploadMessage.style.display = 'block';
             progressBarFill.style.width = percentComplete + '%';
             progressBarFill.innerText = Math.round(percentComplete) + '%';
+
+            if (percentComplete === 100) {
+                showAnalyzingMessage();
+            }
         }
     });
 
@@ -85,10 +98,9 @@ function uploadFiles() {
 
                 progressBarFill.style.width = '0%';
                 document.getElementById('progress-bar').style.display = 'none';
-                uploadMessage.style.display = 'none';
 
+                showProcessingMessage();
                 processingProgressBar.style.display = 'block';
-                processingMessage.style.display = 'block';
 
                 processedFiles = messages.map((msg, index) => ({
                     filename: msg,
