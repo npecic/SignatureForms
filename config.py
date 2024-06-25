@@ -14,5 +14,7 @@ FOLDER1_DIR = os.getenv('FOLDER1_DIR', 'folder1')
 FOLDER2_DIR = os.getenv('FOLDER2_DIR', 'folder2')
 
 ALLOWED_EXTENSIONS = {'pdf'}
-SECRET_KEY = os.getenv('SECRET_KEY', 'supersecretkey')
+SECRET_KEY = os.getenv('SECRET_KEY', 'formsteam')
 MAX_CONTENT_LENGTH = 10 * 1024 * 1024 * 1024  # 10 GB
+BATCH_SIZE = 50  # Set the desired batch size
+

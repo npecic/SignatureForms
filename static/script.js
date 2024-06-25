@@ -56,7 +56,7 @@ function showProcessingMessage() {
     message.innerHTML = '<div class="notification-item"><span class="notification-text"><strong>Processing PDF files</strong></span></div>';
 }
 
-function uploadFiles() {
+async function uploadFiles() {
     let files = fileInput.files;
     if (files.length === 0) {
         message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>No files selected.</strong></span></div>`;
@@ -65,73 +65,123 @@ function uploadFiles() {
 
     uploadBtn.disabled = true;
     message.innerHTML = '<div class="notification-item"><span class="notification-text"><strong>Uploading PDF files</strong></span></div>';
+    uploadMessage.style.display = 'block';
+    progressBarFill.style.width = '0%';
+    progressBarFill.innerText = '0%';
 
-    let formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-        formData.append('files', files[i]);
+    let chunkSize = 5 * 1024 * 1024;  // 5MB chunk size
+    let allFilesProcessed = [];
+    let totalChunksUploaded = 0;
+    let totalChunks = Array.from(files).reduce((acc, file) => acc + Math.ceil(file.size / chunkSize), 0);
+
+    for (let file of files) {
+        let fileChunks = Math.ceil(file.size / chunkSize);
+        let chunkNumber = 0;
+
+        for (let start = 0; start < file.size; start += chunkSize) {
+            let chunk = file.slice(start, start + chunkSize);
+            let formData = new FormData();
+            formData.append('chunk', chunk);
+            formData.append('fileName', file.name);
+            formData.append('chunkNumber', chunkNumber);
+            formData.append('totalChunks', fileChunks);
+
+            let response = await uploadFileChunk(formData);
+            if (response.status === 'success' && response.message === 'File upload complete') {
+                allFilesProcessed.push(response.filePath);
+            }
+            chunkNumber++;
+            totalChunksUploaded++;
+
+            // Update upload progress bar
+            let uploadProgress = Math.round((totalChunksUploaded / totalChunks) * 100);
+            progressBarFill.style.width = `${uploadProgress}%`;
+            progressBarFill.innerText = `${uploadProgress}%`;
+
+            if (uploadProgress === 100) {
+                uploadMessage.style.display = 'none';
+            }
+        }
     }
 
-    let xhr = new XMLHttpRequest();
-    xhr.open('POST', '/upload');
-    xhr.upload.addEventListener('progress', (event) => {
-        if (event.lengthComputable) {
-            let percentComplete = (event.loaded / event.total) * 100;
-            document.getElementById('progress-bar').style.display = 'block';
-            uploadMessage.style.display = 'block';
-            progressBarFill.style.width = percentComplete + '%';
-            progressBarFill.innerText = Math.round(percentComplete) + '%';
+    if (allFilesProcessed.length > 0) {
+        await processUploadedFiles(allFilesProcessed);
+    }
 
-            if (percentComplete === 100) {
-                showAnalyzingMessage();
-            }
-        }
-    });
+    uploadBtn.disabled = false;
+}
 
-    xhr.onload = () => {
-        if (xhr.status === 200) {
-            let response = JSON.parse(xhr.responseText);
-            if (response.status === 'success') {
-                let messages = response.messages;
-                let downloadLinks = response.download_links;
-                let totalFiles = messages.length;
-                let processedCount = 0;
-
-                progressBarFill.style.width = '0%';
-                document.getElementById('progress-bar').style.display = 'none';
-
-                showProcessingMessage();
-                processingProgressBar.style.display = 'block';
-
-                processedFiles = messages.map((msg, index) => ({
-                    filename: msg,
-                    downloadLink: downloadLinks[index]
-                }));
-
-                let processInterval = setInterval(() => {
-                    processedCount++;
-                    let processingPercentComplete = (processedCount / totalFiles) * 100;
-                    processingProgressBarFill.style.width = processingPercentComplete + '%';
-                    processingProgressBarFill.innerText = Math.round(processingPercentComplete) + '%';
-
-                    if (processedCount >= totalFiles) {
-                        clearInterval(processInterval);
-                        processingProgressBar.style.display = 'none';
-                        processingMessage.style.display = 'none';
-                        displayFiles(currentPage);
-                        updatePagination();
-                    }
-                }, 100);
-
+function uploadFileChunk(formData) {
+    return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload_file_chunk');
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                resolve(JSON.parse(xhr.response));
             } else {
-                message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>${response.message}</strong></span></div>`;
+                reject(xhr.statusText);
             }
-        } else {
-            message.innerHTML = `<div class="notification-item"><span class="notification-text"><strong>Upload failed</strong></span></div>`;
-        }
-        uploadBtn.disabled = false;
-    };
+        };
+        xhr.onerror = () => reject(xhr.statusText);
+        xhr.send(formData);
+    });
+}
 
-    xhr.send(formData);
+async function processUploadedFiles(filePaths) {
+    message.innerHTML = '<div class="notification-item"><span class="notification-text"><strong>Processing uploaded files</strong></span></div>';
+    processingMessage.style.display = 'block';
+    processingProgressBar.style.display = 'block';
+    processingProgressBarFill.style.width = '0%';
+    processingProgressBarFill.innerText = '0%';
+
+    let totalFiles = filePaths.length;
+    let processedFilesCount = 0;
+
+    let responses = await Promise.all(filePaths.map(async (filePath, index) => {
+        let response = await processFile(filePath);
+        processedFilesCount++;
+
+        // Update processing progress bar
+        let processingProgress = Math.round((processedFilesCount / totalFiles) * 100);
+        processingProgressBarFill.style.width = `${processingProgress}%`;
+        processingProgressBarFill.innerText = `${processingProgress}%`;
+
+        // Add the processed file details to the array
+        processedFiles.push({
+            filename: response.message,
+            downloadLink: response.downloadLink
+        });
+
+        if (processingProgress === 100) {
+            processingMessage.style.display = 'none';
+            processingProgressBar.style.display = 'none';
+        }
+
+        return response;
+    }));
+
+    displayFiles(currentPage);
+    updatePagination();
+
+    // Clear the upload folder once processing is complete
+    await clearUploadFolder();
+}
+
+function processFile(filePath) {
+    return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/process_file');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                resolve(JSON.parse(xhr.response));
+            } else {
+                reject(xhr.statusText);
+            }
+        };
+        xhr.onerror = () => reject(xhr.statusText);
+        xhr.send(JSON.stringify({ filePath }));
+    });
 }
 
 function displayFiles(page) {
@@ -201,3 +251,24 @@ clearUploadDirBtn.addEventListener('click', () => {
     };
     xhr.send();
 });
+
+async function clearUploadFolder() {
+    return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/clear_upload_dir');
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                let response = JSON.parse(xhr.response);
+                if (response.status === 'success') {
+                    resolve(response);
+                } else {
+                    reject(response.message);
+                }
+            } else {
+                reject(xhr.statusText);
+            }
+        };
+        xhr.onerror = () => reject(xhr.statusText);
+        xhr.send();
+    });
+}
