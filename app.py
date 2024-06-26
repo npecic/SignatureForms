@@ -85,7 +85,17 @@ def upload_file_chunk():
         # Cleanup the temporary directory
         shutil.rmtree(temp_dir)
 
+        # Emit progress update
+        progress = 100
+        message = 'File upload complete'
+        socketio.emit('progress_update', {'progress': progress, 'message': message})
+
         return jsonify({'status': 'success', 'message': 'File upload complete', 'filePath': final_file_path})
+
+    # Calculate progress
+    progress = (chunk_number + 1) / total_chunks * 100
+    message = f'Chunk {chunk_number + 1} of {total_chunks} uploaded'
+    socketio.emit('progress_update', {'progress': progress, 'message': message})
 
     return jsonify({'status': 'success', 'message': 'Chunk uploaded successfully'})
 
@@ -273,7 +283,7 @@ async def clear_compare_img_folder():
         for folder in folders_to_clear:
             for filename in os.listdir(folder):
                 file_path = os.path.join(folder, filename)
-                if os.path.isfile(file_path) or os.path.islink(file_path):
+                if os.path.isfile(file_path) or os.link(file_path):
                     os.unlink(file_path)
                 elif os.path.isdir(file_path):
                     shutil.rmtree(file_path)
@@ -385,7 +395,7 @@ async def clear_upload_dir():
     try:
         for filename in os.listdir(app.config['UPLOAD_FOLDER']):
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            if os.path.isfile(file_path) or os.path.islink(file_path):
+            if os.path.isfile(file_path) or os.link(file_path):
                 os.unlink(file_path)
             elif os.path.isdir(file_path):
                 shutil.rmtree(file_path)
@@ -398,7 +408,7 @@ async def clear_output_directory():
     try:
         for filename in os.listdir(app.config['OUTPUT_FOLDER']):
             file_path = os.path.join(app.config['OUTPUT_FOLDER'], filename)
-            if os.path.isfile(file_path) or os.path.islink(file_path):
+            if os.path.isfile(file_path) or os.link(file_path):
                 os.unlink(file_path)
             elif os.path.isdir(file_path):
                 shutil.rmtree(file_path)

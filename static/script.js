@@ -100,6 +100,11 @@ async function uploadFiles() {
 
             if (uploadProgress === 100) {
                 uploadMessage.style.display = 'none';
+                // Show the progress bar after upload is finished
+                processingMessage.style.display = 'block';
+                processingProgressBar.style.display = 'block';
+                processingProgressBarFill.style.width = '0%';
+                processingProgressBarFill.innerText = '0%';
             }
         }
     }
@@ -126,6 +131,27 @@ function uploadFileChunk(formData) {
         xhr.send(formData);
     });
 }
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    var socket = io();
+
+    socket.on('progress_update', function(data) {
+        let progress = data.progress;
+        let message = data.message;
+
+        if (message === 'File upload complete') {
+            // Hide upload progress bar and show processing progress bar
+            uploadMessage.style.display = 'none';
+            processingMessage.style.display = 'block';
+            processingProgressBar.style.display = 'block';
+            processingProgressBarFill.style.width = '0%';
+            processingProgressBarFill.innerText = '0%';
+        }
+
+        processingProgressBarFill.style.width = `${progress}%`;
+        processingProgressBarFill.innerText = `${progress}%`;
+    });
+});
 
 async function processUploadedFiles(filePaths) {
     message.innerHTML = '<div class="notification-item"><span class="notification-text"><strong>Processing uploaded files</strong></span></div>';
