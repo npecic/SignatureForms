@@ -1,0 +1,12 @@
+aiofiles
+PyPDF2
+opencv-python-headless
+python-dotenv
+flask
+flask-socketio
+fitz  # PyMuPDF
+numpy
+pdf2image
+pytesseract
+reportlab
+werkzeug
