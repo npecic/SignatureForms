@@ -1,15 +1,14 @@
 import os
-import shutil
 import logging
-import zipfile
-import tempfile
+import shutil
+import aiofiles
+import asyncio
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from flask import Flask, request, jsonify, render_template
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
 from config import UPLOAD_FOLDER, OUTPUT_FOLDER, ALLOWED_EXTENSIONS, MAX_CONTENT_LENGTH, BATCH_SIZE
 from signature_detection import signature_detector
-import aiofiles
-import asyncio
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -18,6 +17,11 @@ app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH  # Set the maximum upload 
 app.config['BATCH_SIZE'] = BATCH_SIZE  # Declare batch size
 
 logging.basicConfig(level=logging.DEBUG)
+
+# Using ProcessPoolExecutor for CPU-bound tasks
+process_executor = ProcessPoolExecutor(max_workers=os.cpu_count()*2)
+# Using ThreadPoolExecutor for I/O-bound tasks
+io_executor = ThreadPoolExecutor(max_workers=os.cpu_count() * 3)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -30,6 +34,9 @@ async def save_file(file, upload_folder, filename=None):
         await f.write(file.read())
     logging.debug(f"Saved file {filename} to {filepath}")
     return filepath
+
+def process_file_sync(filepath):
+    return asyncio.run(process_file(filepath))
 
 async def process_file(filepath):
     logging.debug(f"Processing file: {filepath}")
@@ -63,22 +70,6 @@ async def cleanup_upload_folder():
     except Exception as e:
         logging.error(f"Error cleaning up upload folder: {e}")
 
-def compress_files(filepaths):
-    temp_dir = tempfile.mkdtemp()
-    zip_filename = os.path.join(temp_dir, 'compressed_files.zip')
-
-    with zipfile.ZipFile(zip_filename, 'w') as zipf:
-        for filepath in filepaths:
-            zipf.write(filepath, arcname=os.path.basename(filepath))
-
-    logging.debug(f"Compressed files into {zip_filename}")
-    return zip_filename
-
-def decompress_file(zip_filepath, extract_to):
-    with zipfile.ZipFile(zip_filepath, 'r') as zip_ref:
-        zip_ref.extractall(extract_to)
-    logging.debug(f"Decompressed file {zip_filepath} to {extract_to}")
-
 @app.route('/upload', methods=['GET', 'POST'])
 async def upload_file():
     if request.method == 'GET':
@@ -98,21 +89,11 @@ async def upload_file():
     for i in range(0, total_files, batch_size):
         batch_files = files[i:i + batch_size]
         filepaths = await asyncio.gather(*[save_file(file, UPLOAD_FOLDER) for file in batch_files])
-        zip_filepath = compress_files(filepaths)
 
-        # Save the zip file to UPLOAD_FOLDER
-        with open(zip_filepath, 'rb') as zip_file:
-            await save_file(zip_file, UPLOAD_FOLDER, filename='batch.zip')
-
-        # Decompress the zip file
-        decompress_file(zip_filepath, UPLOAD_FOLDER)
-
-        # Process the decompressed files
-        results = await asyncio.gather(*[process_file(filepath) for filepath in filepaths])
+        # Process the files concurrently using ProcessPoolExecutor
+        loop = asyncio.get_event_loop()
+        results = await asyncio.gather(*[loop.run_in_executor(process_executor, process_file_sync, filepath) for filepath in filepaths])
         all_results.extend(results)
-
-        # Clean up the zip file
-        os.remove(zip_filepath)
 
     messages = [result[0] for result in all_results]
     download_links = [result[1] for result in all_results]

@@ -64,10 +64,12 @@ def upload_file_chunk():
     total_chunks = int(request.form['totalChunks'])
     upload_folder = app.config['UPLOAD_FOLDER']
 
-    if 'temp_dir' not in session:
-        session['temp_dir'] = tempfile.mkdtemp(dir=upload_folder)
+    # Determine which temp directory to use based on conditions
+    if 'temp_dir1' not in session:
+        session['temp_dir1'] = tempfile.mkdtemp(dir=upload_folder)
+    temp_dir = session['temp_dir1']
 
-    temp_dir = session['temp_dir']
+    # Create the temporary directory if it doesn't exist
     os.makedirs(temp_dir, exist_ok=True)
 
     chunk_save_path = os.path.join(temp_dir, f"{file_name}_chunk_{chunk_number}")
@@ -99,7 +101,6 @@ def upload_file_chunk():
 
     return jsonify({'status': 'success', 'message': 'Chunk uploaded successfully'})
 
-
 async def cleanup_upload_folder():
     try:
         for filename in os.listdir(app.config['UPLOAD_FOLDER']):
@@ -114,16 +115,6 @@ async def cleanup_upload_folder():
     except Exception as e:
         logging.error(f"Error cleaning up upload folder: {e}")
 
-# @app.route('/clear_upload_dir', methods=['POST'])
-# async def clear_upload_dir():
-#     try:
-#         await cleanup_upload_folder()
-#         return jsonify({'status': 'success', 'message': 'Upload directory cleared successfully.'})
-#     except Exception as e:
-#         logging.error(f"Error clearing upload directory: {e}")
-#         return jsonify({'status': 'error', 'message': str(e)})
-
-
 @app.route('/process_file', methods=['POST'])
 async def process_file_endpoint():
     data = request.get_json()
@@ -133,6 +124,7 @@ async def process_file_endpoint():
 
     result = await process_file(file_path)
     return jsonify({'status': 'success', 'message': result[0], 'downloadLink': result[1], 'signaturesCount': result[2]})
+
 
 @app.route('/upload_chunk', methods=['POST'])
 def upload_chunk():

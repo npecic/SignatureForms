@@ -69,7 +69,7 @@ async function uploadFiles() {
     progressBarFill.style.width = '0%';
     progressBarFill.innerText = '0%';
 
-    let chunkSize = 5 * 1024 * 1024;  // 5MB chunk size
+    let chunkSize =1 * 1024 * 1024;  // 5MB chunk size
     let allFilesProcessed = [];
     let totalChunksUploaded = 0;
     let totalChunks = Array.from(files).reduce((acc, file) => acc + Math.ceil(file.size / chunkSize), 0);

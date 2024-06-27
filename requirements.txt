@@ -4,7 +4,7 @@ opencv-python-headless
 python-dotenv
 flask
 flask-socketio
-fitz  # PyMuPDF
+PyMuPDF # PyMuPDF
 numpy
 pdf2image
 pytesseract

@@ -6,16 +6,19 @@ from pytesseract import image_to_string
 from pdf2image import convert_from_path
 import aiofiles
 import os
+from asyncio import Lock
 
 class SignatureDetector:
     def __init__(self):
         self.primary_keywords = []
         self.secondary_keywords = []
         self.load_default_keywords()
+        self.lock = Lock()  # Ensure thread-safe operations
 
     async def set_keywords(self, primary_keywords, secondary_keywords=None):
-        self.primary_keywords = primary_keywords
-        self.secondary_keywords = secondary_keywords if secondary_keywords is not None else []
+        async with self.lock:
+            self.primary_keywords = primary_keywords
+            self.secondary_keywords = secondary_keywords if secondary_keywords is not None else []
 
     def load_default_keywords(self):
         self.set_keywords_from_json('data/defaultKeywords.json')
