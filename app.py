@@ -14,7 +14,7 @@ from flask_socketio import SocketIO
 from src import utils
 from config import UPLOAD_FOLDER, OUTPUT_FOLDER, SECRET_KEY, MISMATCH_FOLDER, MATCH_FOLDER, BASELINE_IMG_FOLDER, CHANGED_IMG_FOLDER, MAX_CONTENT_LENGTH
 from src.notifications import get_notifications, get_all_notifications
-from src.pdf_compare import compare_pdf_folders
+from src.pdf_compare import compare_pdf_folders_in_parallel
 from src.upload import upload_file, process_file
 from src.signature_detection import signature_detector
 
@@ -201,7 +201,7 @@ def compare_pdfs_route():
         if not temp_dir1 or not temp_dir2:
             return jsonify({'matches': [], 'mismatches': []})
 
-        result = compare_pdf_folders(temp_dir1, temp_dir2, app.config['MISMATCH_DIR'], app.config['MATCH_DIR'])
+        result = compare_pdf_folders_in_parallel(temp_dir1, temp_dir2, app.config['MISMATCH_DIR'], app.config['MATCH_DIR'])
 
         shutil.rmtree(temp_dir1)
         shutil.rmtree(temp_dir2)
@@ -212,6 +212,7 @@ def compare_pdfs_route():
     except Exception as e:
         logging.error(f'Error in compare_pdfs_route: {str(e)}')
         return jsonify({'status': 'error', 'message': str(e)}), 500
+
 
 @app.route('/download_compare_file/<filetype>/<filename>')
 def download_compare_file(filetype, filename):

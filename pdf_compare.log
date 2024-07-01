@@ -1,0 +1,391 @@
+2024-07-01 14:28:08,890 - INFO -  * Restarting with stat
+2024-07-01 14:28:10,266 - WARNING -  * Debugger is active!
+2024-07-01 14:28:10,270 - INFO -  * Debugger PIN: 523-085-904
+2024-07-01 14:28:40,996 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:30:35,704 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:30:35,789 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:30:52,244 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:30:53,701 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:31:17,138 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:31:17,140 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 14:31:17,232 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 14:31:17,235 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:31:17,236 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 14:31:17,236 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 14:31:18,605 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:31:18,606 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 14:31:18,653 - DEBUG - Matched folder cleared: match
+2024-07-01 14:31:18,655 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:31:18,656 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 14:31:18,656 - DEBUG - Matched folder cleared: match
+2024-07-01 14:31:20,065 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:31:20,157 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:31:48,349 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:31:49,797 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:06,269 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:06,270 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 14:46:06,270 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 14:46:06,272 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:06,272 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 14:46:06,272 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 14:46:07,436 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:07,437 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 14:46:07,678 - DEBUG - Matched folder cleared: match
+2024-07-01 14:46:07,680 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:07,681 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 14:46:07,681 - DEBUG - Matched folder cleared: match
+2024-07-01 14:46:08,245 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:08,340 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:09,740 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:10,509 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:28,010 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:28,073 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:36,901 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:41,909 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:41,912 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:41,975 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:46:44,511 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:56:39,271 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:56:39,354 - DEBUG - Using proactor: IocpProactor
+2024-07-01 14:57:15,414 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:00:56,461 - INFO -  * Detected change in 'C:\\Users\\NemanjaPecic\\PycharmProjects\\SignatureForms\\src\\pdf_compare.py', reloading
+2024-07-01 15:00:56,698 - INFO -  * Restarting with stat
+2024-07-01 15:01:09,275 - INFO -  * Restarting with stat
+2024-07-01 15:01:10,652 - WARNING -  * Debugger is active!
+2024-07-01 15:01:10,654 - INFO -  * Debugger PIN: 523-085-904
+2024-07-01 15:01:16,121 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:01:16,126 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:01:16,216 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:01:17,174 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:01:21,917 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:01:21,918 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:01:21,921 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:01:21,923 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:01:21,924 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:01:21,924 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:01:23,019 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:01:23,020 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:01:23,256 - DEBUG - Matched folder cleared: match
+2024-07-01 15:01:23,258 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:01:23,259 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:01:23,259 - DEBUG - Matched folder cleared: match
+2024-07-01 15:04:07,347 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:04:30,334 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:04:30,369 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:08:05,149 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:08:38,884 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:08:49,080 - WARNING - Mismatch in number of pages: uploads\temp_20240701150848_1\Auto_Package_-_Insured_Broker_1_3_signatures.pdf vs uploads\temp_20240701150848_2\Auto_Package_-_Insured_Broker_1_3_signatures.pdf
+2024-07-01 15:09:16,819 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:09:16,861 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:09:29,411 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:09:30,252 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:09:59,157 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:09:59,158 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:09:59,160 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:09:59,162 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:09:59,163 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:09:59,163 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:10:00,139 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:10:00,140 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:10:00,142 - DEBUG - Matched folder cleared: match
+2024-07-01 15:10:00,143 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:10:00,144 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:10:00,144 - DEBUG - Matched folder cleared: match
+2024-07-01 15:23:56,979 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:23:57,023 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:24:13,829 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:24:14,886 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:24:14,910 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:24:16,067 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:24:17,267 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:24:19,963 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:24:19,964 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:24:19,965 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:24:19,967 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:24:19,969 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:24:19,969 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:24:45,308 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:24:45,365 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:04,826 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:06,537 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:08,132 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:08,853 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:09,721 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:10,347 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:10,365 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:11,637 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:12,899 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:12,900 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:25:12,900 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:25:12,901 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:12,901 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:25:12,901 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:25:14,235 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:14,236 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:25:14,237 - DEBUG - Matched folder cleared: match
+2024-07-01 15:25:14,240 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:14,240 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:25:14,241 - DEBUG - Matched folder cleared: match
+2024-07-01 15:25:15,812 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:15,831 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:25:17,237 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:32:08,178 - INFO -  * Detected change in 'C:\\Users\\NemanjaPecic\\PycharmProjects\\SignatureForms\\src\\pdf_compare.py', reloading
+2024-07-01 15:32:08,511 - INFO -  * Restarting with stat
+2024-07-01 15:32:23,367 - INFO -  * Restarting with stat
+2024-07-01 15:32:24,815 - WARNING -  * Debugger is active!
+2024-07-01 15:32:24,817 - INFO -  * Debugger PIN: 523-085-904
+2024-07-01 15:32:27,753 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:32:41,729 - INFO - Found 10 files in folder1.
+2024-07-01 15:32:41,729 - INFO - Found 8 files in folder2.
+2024-07-01 15:32:41,729 - WARNING - File Auto_Package_-_Insured_Broker_1_3_signatures.pdf from folder1 not found in folder2.
+2024-07-01 15:32:41,729 - WARNING - File Home Owners Package -  Insured_ Broker (10)_3_signatures.pdf from folder1 not found in folder2.
+2024-07-01 15:32:41,729 - INFO - Found 8 matching files to compare.
+2024-07-01 15:32:42,023 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:32:42,028 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:32:42,043 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:32:42,205 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:32:42,315 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:33:58,571 - INFO -  * Detected change in 'C:\\Users\\NemanjaPecic\\PycharmProjects\\SignatureForms\\src\\pdf_compare.py', reloading
+2024-07-01 15:33:58,886 - INFO -  * Restarting with stat
+2024-07-01 15:34:12,363 - INFO -  * Restarting with stat
+2024-07-01 15:34:13,824 - WARNING -  * Debugger is active!
+2024-07-01 15:34:13,826 - INFO -  * Debugger PIN: 523-085-904
+2024-07-01 15:34:14,512 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:34:14,617 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:34:33,687 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:34:44,347 - INFO - Found 8 matching files to compare.
+2024-07-01 15:34:44,584 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:34:44,600 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:34:44,611 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:34:44,777 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:34:44,891 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:35:58,492 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:36:09,047 - INFO - Found 10 matching files to compare.
+2024-07-01 15:36:09,179 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:36:09,180 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:36:09,278 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:36:09,580 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:36:09,691 - ERROR - Error comparing images: OpenCV(4.10.0) d:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\color.simd_helpers.hpp:92: error: (-2:Unspecified error) in function '__cdecl cv::impl::`anonymous-namespace'::CvtHelper<struct cv::impl::`anonymous namespace'::Set<3,4,-1>,struct cv::impl::A0xd9a48b77::Set<1,-1,-1>,struct cv::impl::A0xd9a48b77::Set<0,2,5>,4>::CvtHelper(const class cv::_InputArray &,const class cv::_OutputArray &,int)'
+> Invalid number of channels in input image:
+>     'VScn::contains(scn)'
+> where
+>     'scn' is 1
+
+2024-07-01 15:38:46,454 - INFO -  * Detected change in 'C:\\Users\\NemanjaPecic\\PycharmProjects\\SignatureForms\\src\\pdf_compare.py', reloading
+2024-07-01 15:38:46,602 - INFO -  * Restarting with stat
+2024-07-01 15:38:48,736 - WARNING -  * Debugger is active!
+2024-07-01 15:38:48,739 - INFO -  * Debugger PIN: 523-085-904
+2024-07-01 15:38:51,277 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:38:55,147 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:38:55,148 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:38:55,149 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:38:55,151 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:38:55,153 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:38:55,153 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:38:55,979 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:38:55,980 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:38:55,982 - DEBUG - Matched folder cleared: match
+2024-07-01 15:38:55,984 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:38:55,984 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:38:55,985 - DEBUG - Matched folder cleared: match
+2024-07-01 15:38:56,637 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:38:56,719 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:38:57,883 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:38:58,669 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:39:10,093 - INFO - Found 10 files in folder1.
+2024-07-01 15:39:10,093 - INFO - Found 10 files in folder2.
+2024-07-01 15:39:10,093 - INFO - Found 10 matching files to compare.
+2024-07-01 15:39:20,715 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:39:20,821 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:39:48,533 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:39:51,084 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:39:51,085 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:39:51,087 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:39:51,088 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:39:51,089 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:39:51,089 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:39:52,218 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:39:52,220 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:39:52,222 - DEBUG - Matched folder cleared: match
+2024-07-01 15:39:52,224 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:39:52,225 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:39:52,226 - DEBUG - Matched folder cleared: match
+2024-07-01 15:39:53,164 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:39:53,205 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:39:54,563 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:39:55,405 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:40:06,754 - INFO - Found 10 files in folder1.
+2024-07-01 15:40:06,754 - INFO - Found 10 files in folder2.
+2024-07-01 15:40:06,754 - INFO - Found 10 matching files to compare.
+2024-07-01 15:40:28,150 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:40:28,192 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:40:39,621 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:41:01,898 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:41:01,899 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:41:01,901 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:41:01,903 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:41:01,904 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:41:01,904 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:41:03,121 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:41:03,124 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:41:03,125 - DEBUG - Matched folder cleared: match
+2024-07-01 15:41:03,128 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:41:03,129 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:41:03,129 - DEBUG - Matched folder cleared: match
+2024-07-01 15:41:03,678 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:41:03,723 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:41:05,269 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:41:06,084 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:41:57,557 - INFO - Found 1160 files in folder1.
+2024-07-01 15:41:57,557 - INFO - Found 1160 files in folder2.
+2024-07-01 15:41:57,559 - INFO - Found 1160 matching files to compare.
+2024-07-01 15:52:34,622 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:52:34,744 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:52:43,260 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:52:54,348 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:10,581 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:10,641 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:11,517 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:12,772 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:15,330 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:15,332 - DEBUG - Processing file: uploads\Domestic_Workers_Compensation_-_Insured_Broker_1_2_signatures.pdf
+2024-07-01 15:53:15,471 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:16,376 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:23,019 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:23,881 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:35,609 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:37,027 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:37,744 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:48,361 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:49,843 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:49,861 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:53:50,691 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:00,400 - INFO - Found 10 files in folder1.
+2024-07-01 15:54:00,400 - INFO - Found 10 files in folder2.
+2024-07-01 15:54:00,400 - INFO - Found 10 matching files to compare.
+2024-07-01 15:54:08,396 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:08,418 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:09,315 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:10,867 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:10,886 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:11,642 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:12,782 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:12,798 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:22,188 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:24,546 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:24,547 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:54:24,786 - DEBUG - Matched folder cleared: match
+2024-07-01 15:54:24,788 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:24,789 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:54:24,789 - DEBUG - Matched folder cleared: match
+2024-07-01 15:54:26,276 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:26,277 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:54:26,280 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:54:26,282 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:26,283 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:54:26,283 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:54:27,555 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:27,573 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:29,516 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:30,260 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:54:39,698 - INFO - Found 10 files in folder1.
+2024-07-01 15:54:39,698 - INFO - Found 10 files in folder2.
+2024-07-01 15:54:39,698 - INFO - Found 10 matching files to compare.
+2024-07-01 15:55:25,426 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:55:25,427 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:55:25,429 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:55:25,431 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:55:25,431 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-01 15:55:25,433 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-01 15:55:26,515 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:55:26,515 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:55:26,517 - DEBUG - Matched folder cleared: match
+2024-07-01 15:55:26,518 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:55:26,518 - DEBUG - Trying to clear matched folder at: match
+2024-07-01 15:55:26,519 - DEBUG - Matched folder cleared: match
+2024-07-01 15:55:27,228 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:55:27,245 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:55:28,490 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:55:29,404 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:56:40,116 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:56:40,132 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:56:42,635 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:56:54,115 - INFO - Found 10 files in folder1.
+2024-07-01 15:56:54,115 - INFO - Found 10 files in folder2.
+2024-07-01 15:56:54,115 - INFO - Found 10 matching files to compare.
+2024-07-01 15:56:57,755 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:56:57,769 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:56:58,516 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:57:01,787 - DEBUG - Using proactor: IocpProactor
+2024-07-01 15:57:01,788 - DEBUG - Processing file: uploads\Collections_Package_-_Named_Insured_Broker_11_2_signatures.pdf
+2024-07-01 15:57:01,841 - DEBUG - Using proactor: IocpProactor

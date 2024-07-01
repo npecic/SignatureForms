@@ -39,59 +39,83 @@ function updatePath(inputId, inputElement) {
 }
 
 function uploadAndCompareFolders(folder1Files, folder2Files) {
-    const chunkSize = 1024 * 1024; // 1MB chunk size
+    const chunkSize = 1 * 1024 * 1024; // 1MB chunk size
+    const batchSize = 100; // Number of files to upload in each batch
     let totalFiles = folder1Files.length + folder2Files.length;
     let filesUploaded = 0;
 
-    function uploadFolder(folderFiles, folderName) {
-        Array.from(folderFiles).forEach(file => {
-            const totalChunks = Math.ceil(file.size / chunkSize);
-            let currentChunk = 0;
+    function uploadFolderBatch(folderFiles, folderName, batchIndex = 0) {
+        const startIndex = batchIndex * batchSize;
+        const endIndex = Math.min(startIndex + batchSize, folderFiles.length);
+        const batch = Array.from(folderFiles).slice(startIndex, endIndex);
 
-            function uploadNextChunk() {
-                const start = currentChunk * chunkSize;
-                const end = Math.min(start + chunkSize, file.size);
-                const chunk = file.slice(start, end);
+        let batchFilesUploaded = 0;
 
-                const formData = new FormData();
-                formData.append('chunk', chunk);
-                formData.append('fileName', file.name);
-                formData.append('chunkNumber', currentChunk);
-                formData.append('totalChunks', totalChunks);
-                formData.append('folder', folderName);
+        function uploadNextFile() {
+            if (batchFilesUploaded < batch.length) {
+                const file = batch[batchFilesUploaded];
+                const totalChunks = Math.ceil(file.size / chunkSize);
+                let currentChunk = 0;
 
-                fetch('/upload_chunk', {
-                    method: 'POST',
-                    body: formData,
-                }).then(response => {
-                    if (response.ok) {
-                        currentChunk++;
-                        if (currentChunk < totalChunks) {
-                            uploadNextChunk();
+                function uploadNextChunk(retryCount = 0) {
+                    const start = currentChunk * chunkSize;
+                    const end = Math.min(start + chunkSize, file.size);
+                    const chunk = file.slice(start, end);
+
+                    const formData = new FormData();
+                    formData.append('chunk', chunk);
+                    formData.append('fileName', file.name);
+                    formData.append('chunkNumber', currentChunk);
+                    formData.append('totalChunks', totalChunks);
+                    formData.append('folder', folderName);
+
+                    fetch('/upload_chunk', {
+                        method: 'POST',
+                        body: formData,
+                    }).then(response => {
+                        if (response.ok) {
+                            currentChunk++;
+                            if (currentChunk < totalChunks) {
+                                uploadNextChunk();
+                            } else {
+                                batchFilesUploaded++;
+                                filesUploaded++;
+                                updateProgressBar(filesUploaded, totalFiles, 50); // Update progress bar for uploads
+                                uploadNextFile();
+                            }
                         } else {
-                            filesUploaded++;
-                            updateProgressBar(filesUploaded, totalFiles, 50); // Update progress bar for uploads
-//                            console.log(`Upload complete for ${file.name}, total files uploaded: ${filesUploaded}`);
-                            if (filesUploaded === totalFiles) {
-                                console.log('All files uploaded. Starting comparison.');
-                                document.getElementById('progressBar').textContent = 'Upload completed. Comparing...'; // Update progress bar text
-                                fetchComparisonResults();
+                            console.error(`Upload failed for ${file.name}`);
+                            if (retryCount < 3) {
+                                console.log(`Retrying upload for ${file.name}, attempt ${retryCount + 1}`);
+                                setTimeout(() => uploadNextChunk(retryCount + 1), 1000); // Retry after 1 second
                             }
                         }
-                    } else {
-                        console.error(`Upload failed for ${file.name}`);
-                    }
-                }).catch(error => {
-                    console.error(`Error during fetch for ${file.name}`, error);
-                });
-            }
+                    }).catch(error => {
+                        console.error(`Error during fetch for ${file.name}`, error);
+                        if (retryCount < 3) {
+                            console.log(`Retrying upload for ${file.name}, attempt ${retryCount + 1}`);
+                            setTimeout(() => uploadNextChunk(retryCount + 1), 1000); // Retry after 1 second
+                        }
+                    });
+                }
 
-            uploadNextChunk();
-        });
+                uploadNextChunk();
+            } else {
+                if (endIndex < folderFiles.length) {
+                    uploadFolderBatch(folderFiles, folderName, batchIndex + 1);
+                } else if (filesUploaded === totalFiles) {
+                    console.log('All files uploaded. Starting comparison.');
+                    document.getElementById('progressBar').textContent = 'Upload completed. Comparing...'; // Update progress bar text
+                    fetchComparisonResults();
+                }
+            }
+        }
+
+        uploadNextFile();
     }
 
-    uploadFolder(folder1Files, 'folder1');
-    uploadFolder(folder2Files, 'folder2');
+    uploadFolderBatch(folder1Files, 'folder1');
+    uploadFolderBatch(folder2Files, 'folder2');
 }
 
 function updateProgressBar(filesUploaded, totalFiles, maxPercent) {
