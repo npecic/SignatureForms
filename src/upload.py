@@ -8,7 +8,7 @@ from flask import Flask, request, jsonify, render_template
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
 from config import UPLOAD_FOLDER, OUTPUT_FOLDER, ALLOWED_EXTENSIONS, MAX_CONTENT_LENGTH, BATCH_SIZE
-from signature_detection import signature_detector
+from src.signature_detection import signature_detector
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER

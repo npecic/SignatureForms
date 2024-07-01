@@ -6,17 +6,17 @@ import time
 from datetime import datetime
 import zipfile
 import os
-from flask import Flask, redirect, url_for, render_template, send_from_directory, request, send_file, jsonify, after_this_request, session
+from flask import Flask, redirect, url_for, render_template, send_from_directory, request, send_file, jsonify, after_this_request
 from PyPDF2 import PdfReader
 from werkzeug.utils import secure_filename
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
 
-import utils
+from src import utils
 from config import UPLOAD_FOLDER, OUTPUT_FOLDER, SECRET_KEY, MISMATCH_FOLDER, MATCH_FOLDER, BASELINE_IMG_FOLDER, CHANGED_IMG_FOLDER, MAX_CONTENT_LENGTH
-from notifications import get_notifications, get_all_notifications
-from pdf_compare import compare_pdf_folders
-from upload import upload_file, process_file
-from signature_detection import signature_detector
+from src.notifications import get_notifications, get_all_notifications
+from src.pdf_compare import compare_pdf_folders
+from src.upload import upload_file, process_file
+from src.signature_detection import signature_detector
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
