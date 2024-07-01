@@ -3,6 +3,7 @@ PyPDF2
 opencv-python-headless
 python-dotenv
 flask
+flask [async]
 flask-socketio
 PyMuPDF # PyMuPDF
 numpy

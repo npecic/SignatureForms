@@ -64,10 +64,10 @@ def upload_file_chunk():
     total_chunks = int(request.form['totalChunks'])
     upload_folder = app.config['UPLOAD_FOLDER']
 
-    # Determine which temp directory to use based on conditions
-    if 'temp_dir1' not in session:
-        session['temp_dir1'] = tempfile.mkdtemp(dir=upload_folder)
-    temp_dir = session['temp_dir1']
+    # Generate temporary directory for this upload
+    if 'temp_dir' not in globals():
+        globals()['temp_dir'] = generate_temp_dir('file_upload')
+    temp_dir = globals()['temp_dir']
 
     # Create the temporary directory if it doesn't exist
     os.makedirs(temp_dir, exist_ok=True)
@@ -76,16 +76,21 @@ def upload_file_chunk():
     chunk.save(chunk_save_path)
 
     if chunk_number == total_chunks - 1:
-        final_file_path = os.path.join(upload_folder, file_name)
-        with open(final_file_path, 'wb') as final_file:
+        assembled_file_path = os.path.join(temp_dir, file_name)
+        with open(assembled_file_path, 'wb') as final_file:
             for i in range(total_chunks):
                 chunk_file_path = os.path.join(temp_dir, f"{file_name}_chunk_{i}")
                 with open(chunk_file_path, 'rb') as chunk_file:
                     final_file.write(chunk_file.read())
                 os.remove(chunk_file_path)
 
+        # Move the assembled file to the final upload folder
+        final_file_path = os.path.join(upload_folder, file_name)
+        shutil.move(assembled_file_path, final_file_path)
+
         # Cleanup the temporary directory
         shutil.rmtree(temp_dir)
+        globals().pop('temp_dir', None)
 
         # Emit progress update
         progress = 100
@@ -125,6 +130,11 @@ async def process_file_endpoint():
     result = await process_file(file_path)
     return jsonify({'status': 'success', 'message': result[0], 'downloadLink': result[1], 'signaturesCount': result[2]})
 
+def generate_temp_dir(suffix):
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    temp_dir = os.path.join(app.config['UPLOAD_FOLDER'], f'temp_{timestamp}_{suffix}')
+    os.makedirs(temp_dir, exist_ok=True)
+    return temp_dir
 
 @app.route('/upload_chunk', methods=['POST'])
 def upload_chunk():
@@ -134,14 +144,15 @@ def upload_chunk():
     total_chunks = int(request.form['totalChunks'])
     folder = request.form['folder']
 
+    # Generate temporary directories
     if folder == 'folder1':
-        if 'temp_dir1' not in session:
-            session['temp_dir1'] = tempfile.mkdtemp(dir=app.config['UPLOAD_FOLDER'])
-        temp_dir = session['temp_dir1']
+        if 'temp_dir1' not in globals():
+            globals()['temp_dir1'] = generate_temp_dir('1')
+        temp_dir = globals()['temp_dir1']
     else:
-        if 'temp_dir2' not in session:
-            session['temp_dir2'] = tempfile.mkdtemp(dir=app.config['UPLOAD_FOLDER'])
-        temp_dir = session['temp_dir2']
+        if 'temp_dir2' not in globals():
+            globals()['temp_dir2'] = generate_temp_dir('2')
+        temp_dir = globals()['temp_dir2']
 
     os.makedirs(temp_dir, exist_ok=True)
 
@@ -159,18 +170,13 @@ def upload_chunk():
     return jsonify({'status': 'success'})
 
 @app.route('/upload_folders', methods=['POST'])
-async def upload_folders():
+def upload_folders():
     try:
         folder1_files = request.files.getlist('folder1')
         folder2_files = request.files.getlist('folder2')
 
-        if 'temp_dir1' not in session:
-            session['temp_dir1'] = tempfile.mkdtemp(dir=app.config['UPLOAD_FOLDER'])
-        if 'temp_dir2' not in session:
-            session['temp_dir2'] = tempfile.mkdtemp(dir=app.config['UPLOAD_FOLDER'])
-
-        temp_dir1 = session['temp_dir1']
-        temp_dir2 = session['temp_dir2']
+        temp_dir1 = globals()['temp_dir1']
+        temp_dir2 = globals()['temp_dir2']
 
         for file in folder1_files:
             filename = secure_filename(os.path.basename(file.filename))
@@ -187,10 +193,10 @@ async def upload_folders():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/compare_pdfs', methods=['POST'])
-async def compare_pdfs_route():
+def compare_pdfs_route():
     try:
-        temp_dir1 = session.get('temp_dir1')
-        temp_dir2 = session.get('temp_dir2')
+        temp_dir1 = globals().get('temp_dir1')
+        temp_dir2 = globals().get('temp_dir2')
 
         if not temp_dir1 or not temp_dir2:
             return jsonify({'matches': [], 'mismatches': []})
@@ -199,6 +205,8 @@ async def compare_pdfs_route():
 
         shutil.rmtree(temp_dir1)
         shutil.rmtree(temp_dir2)
+        globals().pop('temp_dir1', None)
+        globals().pop('temp_dir2', None)
 
         return jsonify({'matches': result["matches"], 'mismatches': result["mismatches"]})
     except Exception as e:
