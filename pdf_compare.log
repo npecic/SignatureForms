@@ -389,3 +389,174 @@
 2024-07-01 15:57:01,787 - DEBUG - Using proactor: IocpProactor
 2024-07-01 15:57:01,788 - DEBUG - Processing file: uploads\Collections_Package_-_Named_Insured_Broker_11_2_signatures.pdf
 2024-07-01 15:57:01,841 - DEBUG - Using proactor: IocpProactor
+2024-07-01 16:00:23,801 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:14:58,629 - INFO -  * Restarting with stat
+2024-07-02 08:15:00,098 - WARNING -  * Debugger is active!
+2024-07-02 08:15:00,101 - INFO -  * Debugger PIN: 523-085-904
+2024-07-02 08:15:02,776 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:02,782 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:02,903 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:06,576 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:17,404 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:17,405 - DEBUG - Processing file: uploads\AK_Auto Package - Insured_Broker(2).pdf
+2024-07-02 08:15:18,022 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:18,023 - DEBUG - Processing file: uploads\AL_Auto Package - Insured_Broker(49).pdf
+2024-07-02 08:15:18,674 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:18,675 - DEBUG - Processing file: uploads\AR_Auto Package - Insured_Broker (2).pdf
+2024-07-02 08:15:19,533 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:19,533 - DEBUG - Processing file: uploads\CA_Auto Package - Insured_Broker (3).pdf
+2024-07-02 08:15:20,209 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:20,210 - DEBUG - Processing file: uploads\AZ_Auto Package - Insured_Broker (1).pdf
+2024-07-02 08:15:20,993 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:20,994 - DEBUG - Processing file: uploads\CO_Auto Package - Insured_Broker (4).pdf
+2024-07-02 08:15:21,696 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:21,697 - DEBUG - Processing file: uploads\CT_Auto Package - Insured_Broker (5).pdf
+2024-07-02 08:15:22,483 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:22,484 - DEBUG - Processing file: uploads\DE_Auto Package - Insured_Broker (6).pdf
+2024-07-02 08:15:23,307 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:23,309 - DEBUG - Processing file: uploads\FL_Auto Package - Insured_Broker (7).pdf
+2024-07-02 08:15:23,909 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:23,910 - DEBUG - Processing file: uploads\GA_Auto Package - Insured_Broker (8).pdf
+2024-07-02 08:15:24,501 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:24,502 - DEBUG - Processing file: uploads\HI_Auto Package - Insured_Broker (9).pdf
+2024-07-02 08:15:25,075 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:25,076 - DEBUG - Processing file: uploads\IA_Auto Package - Insured_Broker (13).pdf
+2024-07-02 08:15:25,841 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:25,842 - DEBUG - Processing file: uploads\ID_Auto Package - Insured_Broker (10).pdf
+2024-07-02 08:15:26,414 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:26,415 - DEBUG - Processing file: uploads\IL_Auto Package - Insured_Broker (11).pdf
+2024-07-02 08:15:27,268 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:27,269 - DEBUG - Processing file: uploads\IN_Auto Package - Insured_Broker (12).pdf
+2024-07-02 08:15:27,965 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:27,966 - DEBUG - Processing file: uploads\KS_Auto Package - Insured_Broker (14).pdf
+2024-07-02 08:15:29,109 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:29,110 - DEBUG - Processing file: uploads\KY_Auto Package - Insured_Broker (15).pdf
+2024-07-02 08:15:29,861 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:29,863 - DEBUG - Processing file: uploads\LA_Auto Package - Insured_Broker (16).pdf
+2024-07-02 08:15:30,491 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:30,492 - DEBUG - Processing file: uploads\MA_Auto Package - Insured_Broker (19).pdf
+2024-07-02 08:15:31,557 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:31,558 - DEBUG - Processing file: uploads\MD_Auto Package - Insured_Broker (18).pdf
+2024-07-02 08:15:32,422 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:32,423 - DEBUG - Processing file: uploads\ME_Auto Package - Insured_Broker (17).pdf
+2024-07-02 08:15:33,157 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:33,158 - DEBUG - Processing file: uploads\MI_Auto Package - Insured_Broker (20).pdf
+2024-07-02 08:15:34,107 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:34,108 - DEBUG - Processing file: uploads\MN_Auto Package - Insured_Broker (21).pdf
+2024-07-02 08:15:35,088 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:35,089 - DEBUG - Processing file: uploads\MO_Auto Package - Insured_Broker (23).pdf
+2024-07-02 08:15:35,988 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:35,989 - DEBUG - Processing file: uploads\MS_Auto Package - Insured_Broker (22).pdf
+2024-07-02 08:15:36,526 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:36,527 - DEBUG - Processing file: uploads\MT_Auto Package - Insured_Broker (24).pdf
+2024-07-02 08:15:37,150 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:37,151 - DEBUG - Processing file: uploads\NC_Auto Package - Insured_Broker (31).pdf
+2024-07-02 08:15:38,040 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:38,041 - DEBUG - Processing file: uploads\ND_Auto Package - Insured_Broker (32).pdf
+2024-07-02 08:15:38,997 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:38,998 - DEBUG - Processing file: uploads\NE_Auto Package - Insured_Broker (25).pdf
+2024-07-02 08:15:39,665 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:39,667 - DEBUG - Processing file: uploads\NH_Auto Package - Insured_Broker (27).pdf
+2024-07-02 08:15:40,320 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:40,321 - DEBUG - Processing file: uploads\NJ_Auto Package - Insured_Broker (28).pdf
+2024-07-02 08:15:41,817 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:41,818 - DEBUG - Processing file: uploads\NM_Auto Package - Insured_Broker (29).pdf
+2024-07-02 08:15:42,411 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:42,412 - DEBUG - Processing file: uploads\NV_Auto Package - Insured_Broker (26).pdf
+2024-07-02 08:15:43,127 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:43,128 - DEBUG - Processing file: uploads\NY_Auto Package - Insured_Broker (30).pdf
+2024-07-02 08:15:44,393 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:44,393 - DEBUG - Processing file: uploads\OH_Auto Package - Insured_Broker (33).pdf
+2024-07-02 08:15:45,130 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:45,131 - DEBUG - Processing file: uploads\OK_Auto Package - Insured_Broker (34).pdf
+2024-07-02 08:15:45,772 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:45,773 - DEBUG - Processing file: uploads\OR_Auto Package - Insured_Broker (35).pdf
+2024-07-02 08:15:46,555 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:46,556 - DEBUG - Processing file: uploads\PA_Auto Package - Insured_Broker (36).pdf
+2024-07-02 08:15:47,452 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:47,453 - DEBUG - Processing file: uploads\RI_Auto Package - Insured_Broker (37).pdf
+2024-07-02 08:15:48,207 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:48,208 - DEBUG - Processing file: uploads\SC_Auto Package - Insured_Broker.pdf
+2024-07-02 08:15:49,015 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:49,016 - DEBUG - Processing file: uploads\SD_Auto Package - Insured_Broker (39).pdf
+2024-07-02 08:15:49,915 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:49,916 - DEBUG - Processing file: uploads\TN_Auto Package - Insured_Broker (40).pdf
+2024-07-02 08:15:50,494 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:50,495 - DEBUG - Processing file: uploads\TX_Auto Package - Insured_Broker (41).pdf
+2024-07-02 08:15:51,489 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:51,490 - DEBUG - Processing file: uploads\UT_Auto Package - Insured_Broker (42).pdf
+2024-07-02 08:15:52,107 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:52,108 - DEBUG - Processing file: uploads\VA_Auto Package - Insured_Broker (44).pdf
+2024-07-02 08:15:53,438 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:53,439 - DEBUG - Processing file: uploads\VT_Auto Package - Insured_Broker (43).pdf
+2024-07-02 08:15:54,080 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:54,081 - DEBUG - Processing file: uploads\WA_Auto Package - Insured_Broker (45).pdf
+2024-07-02 08:15:54,816 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:54,817 - DEBUG - Processing file: uploads\WI_Auto Package - Insured_Broker (47).pdf
+2024-07-02 08:15:55,534 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:55,535 - DEBUG - Processing file: uploads\WV_Auto Package - Insured_Broker (46).pdf
+2024-07-02 08:15:56,331 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:15:56,332 - DEBUG - Processing file: uploads\WY_Auto Package - Insured_Broker (48).pdf
+2024-07-02 08:15:57,037 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:16:30,500 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:16:53,380 - DEBUG - Using proactor: IocpProactor
+2024-07-02 08:16:53,409 - DEBUG - Using proactor: IocpProactor
+2024-07-02 10:25:50,711 - INFO -  * Restarting with stat
+2024-07-02 10:25:52,600 - WARNING -  * Debugger is active!
+2024-07-02 10:25:52,603 - INFO -  * Debugger PIN: 523-085-904
+2024-07-02 12:23:20,048 - INFO -  * Detected change in 'C:\\Users\\NemanjaPecic\\PycharmProjects\\SignatureForms\\src\\pdf_compare.py', reloading
+2024-07-02 12:23:20,327 - INFO -  * Restarting with stat
+2024-07-02 12:23:22,569 - WARNING -  * Debugger is active!
+2024-07-02 12:23:22,571 - INFO -  * Debugger PIN: 523-085-904
+2024-07-02 12:23:25,742 - DEBUG - Using proactor: IocpProactor
+2024-07-02 12:23:25,751 - DEBUG - Using proactor: IocpProactor
+2024-07-02 12:23:25,882 - DEBUG - Using proactor: IocpProactor
+2024-07-02 12:23:27,131 - DEBUG - Using proactor: IocpProactor
+2024-07-02 12:23:41,679 - INFO - Found 10 files in folder1.
+2024-07-02 12:23:41,679 - INFO - Found 10 files in folder2.
+2024-07-02 12:23:41,679 - INFO - Found 10 matching files to compare.
+2024-07-02 12:23:47,129 - DEBUG - Using proactor: IocpProactor
+2024-07-02 12:23:47,204 - DEBUG - Using proactor: IocpProactor
+2024-07-02 12:24:04,261 - INFO -  * Detected change in 'C:\\Users\\NemanjaPecic\\PycharmProjects\\SignatureForms\\src\\pdf_compare.py', reloading
+2024-07-02 12:24:04,471 - INFO -  * Restarting with stat
+2024-07-02 12:24:05,897 - WARNING -  * Debugger is active!
+2024-07-02 12:24:05,899 - INFO -  * Debugger PIN: 523-085-904
+2024-07-02 12:24:09,652 - DEBUG - Using proactor: IocpProactor
+2024-07-02 12:24:11,487 - DEBUG - Using proactor: IocpProactor
+2024-07-02 12:24:13,327 - DEBUG - Using proactor: IocpProactor
+2024-07-02 12:24:13,328 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-02 12:24:13,330 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-02 12:24:13,332 - DEBUG - Using proactor: IocpProactor
+2024-07-02 12:24:13,332 - DEBUG - Trying to clear mismatched folder at: misMatch
+2024-07-02 12:24:13,332 - DEBUG - Mismatched folder cleared: misMatch
+2024-07-02 12:24:14,366 - DEBUG - Using proactor: IocpProactor
+2024-07-02 12:24:14,367 - DEBUG - Trying to clear matched folder at: match
+2024-07-02 12:24:14,368 - DEBUG - Matched folder cleared: match
+2024-07-02 12:24:14,371 - DEBUG - Using proactor: IocpProactor
+2024-07-02 12:24:14,373 - DEBUG - Trying to clear matched folder at: match
+2024-07-02 12:24:14,373 - DEBUG - Matched folder cleared: match
+2024-07-02 12:43:55,136 - DEBUG - Using proactor: IocpProactor
+2024-07-02 12:43:55,170 - DEBUG - Using proactor: IocpProactor
+2024-07-02 12:43:56,839 - DEBUG - Using proactor: IocpProactor
+2024-07-02 13:19:41,838 - INFO - Found 10 files in folder1.
+2024-07-02 13:19:41,838 - INFO - Found 10 files in folder2.
+2024-07-02 13:19:41,838 - INFO - Found 10 matching files to compare.
+2024-07-02 13:19:54,821 - DEBUG - Using proactor: IocpProactor
+2024-07-02 13:19:54,887 - DEBUG - Using proactor: IocpProactor
+2024-07-02 13:20:36,605 - DEBUG - Using proactor: IocpProactor
+2024-07-02 15:03:05,094 - DEBUG - Using proactor: IocpProactor
+2024-07-02 15:03:05,172 - DEBUG - Using proactor: IocpProactor
+2024-07-02 15:04:08,434 - DEBUG - Using proactor: IocpProactor
+2024-07-03 08:07:19,997 - DEBUG - Using proactor: IocpProactor
+2024-07-03 08:07:20,083 - DEBUG - Using proactor: IocpProactor
+2024-07-03 08:07:20,975 - DEBUG - Using proactor: IocpProactor
+2024-07-03 08:07:22,143 - DEBUG - Using proactor: IocpProactor
+2024-07-03 08:07:22,167 - DEBUG - Using proactor: IocpProactor
+2024-07-03 08:07:23,027 - DEBUG - Using proactor: IocpProactor
+2024-07-03 08:09:23,603 - DEBUG - Using proactor: IocpProactor
+2024-07-03 08:09:24,739 - DEBUG - Using proactor: IocpProactor
+2024-07-03 08:09:24,744 - DEBUG - Using proactor: IocpProactor
+2024-07-03 08:09:28,269 - DEBUG - Using proactor: IocpProactor
+2024-07-03 08:09:46,719 - DEBUG - Using proactor: IocpProactor
+2024-07-03 08:09:46,721 - DEBUG - Processing file: uploads\MN_Auto Package - Insured_Broker (21).pdf
+2024-07-03 08:09:47,755 - DEBUG - Using proactor: IocpProactor
