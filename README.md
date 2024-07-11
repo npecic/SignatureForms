@@ -41,9 +41,21 @@ The application provides a streamlined interface for comparing PDF documents and
 
 ## Usage
 
-1. Run the application:
+1. Open the project in PyCharm or your preferred IDE.
+2. Run the following command to install the required dependencies:
+   ```sh
+   pip install -r requirements.txt
+   ```
+3. Start the application by running:
    ```sh
    python app.py
    ```
+4. Open your web browser and go to `http://localhost:5000` to access the application interface.
 
-2. Open your web browser and go to `http://localhost:5000` to access the application interface.
+### Application Interface
+
+- **Search Forms for Signatures**: Use predefined keywords or set them manually to search forms for signatures. Upload files from which signatures need to be extracted.
+- **Overview and Download**: View an overview of the processed files and download them individually or in bulk.
+- **Compare PDFs**: Navigate to the "Compare PDFs" page, upload the files to compare, and choose to view matched or mismatched forms. Optionally, see a full-screen side-by-side comparison of the forms.
+
+
